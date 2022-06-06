@@ -1,6 +1,8 @@
 import InputLg from "../InputLg";
 import InputSm from "../InputSm";
 import Button from "../Button";
+import { resolveSOLDomain } from "../../utils/resolveSOLDomain";
+import { validateSolanaAddress } from "../../utils/validateSolanaAddress";
 
 type Fields = {
     to: string;
@@ -15,6 +17,20 @@ type WriteProps = {
 }
 
 export default function Write({ fields, handleChange, nextStep, prevStep }:WriteProps) {
+
+    const handleSubmit = () => {
+        try {
+            if (fields.to.includes(".sol")) {
+                const resolvedDomain = resolveSOLDomain(fields.to);
+                return resolvedDomain
+            } else {
+                return validateSolanaAddress(fields.to)
+            }
+        } catch (error) {
+            return Error("Something ain't right")
+        }
+    }
+
     return (
         <>
             <div className="flex flex-col justify-end">
