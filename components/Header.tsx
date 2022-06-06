@@ -1,3 +1,8 @@
+import Button from "./Button";
+import {
+    WalletMultiButton
+} from '@solana/wallet-adapter-react-ui';
+
 export default function Header() {
 
     return (
@@ -8,12 +13,15 @@ export default function Header() {
                     Tipsea
                 </div>
             </div>
-            <nav className="flex flex-row gap-6 font-medium mr-2">
+            <nav className="flex flex-row gap-6 font-medium mr-2 items-center">
                 <div>
                     Notify Me
                 </div>
                 <div>
                     Leaderboard
+                </div>
+                <div>
+                    <WalletMultiButton />
                 </div>
             </nav>
         </header>
