@@ -1,5 +1,6 @@
 import Box from "../Box";
 import Button from "../Button";
+import Loading from "../Loading";
 
 type Fields = {
     to: string;
@@ -78,6 +79,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
                     </div>
                 </div>
             </div>
+            {/* <Loading /> */}
         </>
     )
 }

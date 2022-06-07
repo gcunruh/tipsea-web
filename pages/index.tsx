@@ -23,7 +23,18 @@ const Home: NextPage = () => {
   })
 
   const orderOptions = [
-    { id: 0, name: "Moscow Mule", imageSrc: "./mule.jpg" },
+    { id: 0, name: "Mojito", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mojito.png" },
+    { id: 1, name: "Old Fashioned", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/old_fashioned.png" },
+    { id: 2, name: "Negroni", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/negroni.png" },
+    { id: 3, name: "Daiquiri", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/daiquiri.png" },
+    { id: 4, name: "Whiskey Sour", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/whiskey_sour.png" },
+    { id: 5, name: "Martini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/martini.png" },
+    { id: 6, name: "Margarita", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/margarita.png" },
+    { id: 7, name: "Manhattan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/manhattan.png" },
+    { id: 8, name: "Aperol Spritz", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/aperol_spritz.png" },
+    { id: 9, name: "Mule", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mule.png" },
+    { id: 10, name: "Pina Colada", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/pina_colada.png" },
+    { id: 11, name: "Sazerac", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/sazerac.png" },
   ]
 
   const prevStep = () => {

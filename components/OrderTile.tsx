@@ -2,6 +2,7 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 
 type OrderTileProps = {
     id: number;
+    name: string;
     onClick: (id: number) => any;
     imageSrc: string;
     selected?: boolean;
@@ -11,13 +12,16 @@ const unSelectedStyles = "group-hover:bg-cyan-900 group-hover:bg-opacity-50"
 const selectedStyles = "bg-cyan-800"
 
 
-export default function OrderTile({ id, onClick, imageSrc, selected }: OrderTileProps) {
+export default function OrderTile({ id, name, onClick, imageSrc, selected }: OrderTileProps) {
     return (
         <div onClick={() => onClick(id)} className="group relative p-4 rounded-md">
             <div className="absolute right-0 top-0">
                 <CheckCircleIcon className={"h-12 w-12 text-white bg-neutral-200 rounded-full " + (selected ? selectedStyles : unSelectedStyles) }/>
             </div>
             <img src={imageSrc} className="h-auto"/>
+            <div className="my-1 font-medium">
+                {name}
+            </div>
         </div>
     )
 }
