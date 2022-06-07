@@ -588,7 +588,7 @@
   dependencies:
     "buffer" "~6.0.3"
 
-"@solana/spl-token@0.2.0":
+"@solana/spl-token@^0.2.0", "@solana/spl-token@0.2.0":
   "integrity" "sha512-RWcn31OXtdqIxmkzQfB2R+WpsJOVS6rKuvpxJFjvik2LyODd+WN58ZP3Rpjpro03fscGAkzlFuP3r42doRJgyQ=="
   "resolved" "https://registry.npmjs.org/@solana/spl-token/-/spl-token-0.2.0.tgz"
   "version" "0.2.0"
