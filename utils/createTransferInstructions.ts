@@ -1,7 +1,8 @@
 // createTransferInstructions.ts
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { AccountMeta, PublicKey, Signer, TransactionInstruction } from '@solana/web3.js'
-import BufferLayout from 'buffer-layout'
+import { struct, u8 } from '@solana/buffer-layout';
+import { u64 } from '@solana/buffer-layout-utils';
 import BN from 'bn.js'
 
 export enum TokenInstruction {
@@ -28,6 +29,13 @@ export enum TokenInstruction {
     InitializeMint2 = 20,
 }
 
+export interface TransferInstructionData {
+    instruction: TokenInstruction.Transfer;
+    amount: bigint;
+}
+
+export const transferInstructionData = struct<TransferInstructionData>([u8('instruction'), u64('amount')]);
+
 /**
  * Construct a Transfer instruction
  *
@@ -44,12 +52,10 @@ export function createTransferInstruction(
     source: PublicKey,
     destination: PublicKey,
     owner: PublicKey,
-    amount: number,
+    amount: number | bigint,
     multiSigners: Signer[] = [],
     programId = TOKEN_PROGRAM_ID
 ): TransactionInstruction {
-    const dataLayout = BufferLayout.struct([BufferLayout.u8('instruction'), BufferLayout.blob(8, 'amount')])
-
     const keys = addSigners(
         [
             { pubkey: source, isSigner: false, isWritable: true },
@@ -57,18 +63,18 @@ export function createTransferInstruction(
         ],
         owner,
         multiSigners
-    )
+    );
 
-    const data = Buffer.alloc(dataLayout.span)
-    dataLayout.encode(
+    const data = Buffer.alloc(transferInstructionData.span);
+    transferInstructionData.encode(
         {
             instruction: TokenInstruction.Transfer,
-            amount: new TokenAmount(amount).toBuffer(),
+            amount: BigInt(amount),
         },
         data
-    )
+    );
 
-    return new TransactionInstruction({ keys, programId, data })
+    return new TransactionInstruction({ keys, programId, data });
 }
 
 export function addSigners(keys: AccountMeta[], ownerOrAuthority: PublicKey, multiSigners: Signer[]): AccountMeta[] {
@@ -81,42 +87,4 @@ export function addSigners(keys: AccountMeta[], ownerOrAuthority: PublicKey, mul
         keys.push({ pubkey: ownerOrAuthority, isSigner: true, isWritable: false })
     }
     return keys
-}
-
-class TokenAmount extends BN {
-    /**
-     * Convert to Buffer representation
-     */
-    toBuffer(): Buffer {
-        const a = super.toArray().reverse()
-        const b = Buffer.from(a)
-        if (b.length === 8) {
-            return b
-        }
-
-        if (b.length >= 8) {
-            throw new Error('TokenAmount too large')
-        }
-
-        const zeroPad = Buffer.alloc(8)
-        b.copy(zeroPad)
-        return zeroPad
-    }
-
-    /**
-     * Construct a TokenAmount from Buffer representation
-     */
-    static fromBuffer(buffer: Buffer): TokenAmount {
-        if (buffer.length !== 8) {
-            throw new Error(`Invalid buffer length: ${buffer.length}`)
-        }
-
-        return new BN(
-            [...buffer]
-                .reverse()
-                .map((i) => `00${i.toString(16)}`.slice(-2))
-                .join(''),
-            16
-        )
-    }
 }
