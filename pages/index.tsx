@@ -75,11 +75,11 @@ const Home: NextPage = () => {
         <div className="w-3/4">
           {
             step < 4 ? steps[step].component : 
-              <div className="flex flex-col justify-center items-center mt-11 mb-44">
-                <div className="font-semibold mb-4 text-center">
+              <div className="flex flex-col justify-center mt-2 mb-44">
+                <div className="font-semibold mb-4 text-left">
                   Congrats! You just sent a Tipsea! Thanks for being a good friend :-)
                 </div>
-                <div className="w-1/2">
+                <div className="w-44">
                   <Button style="filled">
                     View on Solscan
                   </Button>

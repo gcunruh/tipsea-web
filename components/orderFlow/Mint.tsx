@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import Box from "../Box";
 import Button from "../Button";
 import Loading from "../Loading";

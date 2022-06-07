@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+html {
+    background-color: rgb(229 229 229);
+}
+
 .wallet-adapter-button.wallet-adapter-button-trigger {
     background-color: transparent;
     border-top: 1px solid rgb(22 78 99);

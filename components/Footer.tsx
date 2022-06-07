@@ -1,7 +1,7 @@
 export default function Footer() {
 
     return (
-        <footer className="w-full text-center flex flex-col gap-6 mt-44">
+        <footer className="w-full text-center flex flex-col gap-6 pt-44 pb-10 bg-neutral-200">
             <div className="font-press-start text-sm">
                 Technology is Art
             </div>
