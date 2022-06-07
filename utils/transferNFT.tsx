@@ -1,34 +1,55 @@
-import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { createMint, getOrCreateAssociatedTokenAccount, mintTo, transfer } from "@solana/spl-token";
+import { clusterApiUrl, Connection, Transaction, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { WalletNotConnectedError } from '@solana/wallet-adapter-base'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { getOrCreateAssociatedTokenAccount } from './getOrCreateAssociatedTokenAccount'
+import { createTransferInstruction } from './createTransferInstructions'
 
-export const transferNFT = async (from: string, to: string) => {
+export const transferNFT = async (toPubkey: string) => {
     const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+    const { publicKey, signTransaction, sendTransaction} = useWallet();
 
-    // Get the token account of the fromWallet, create it if it does not exist
-    const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
-        connection,
-        from,
-        mint,
-        from
-    );
+    try {
+        if (!publicKey || !signTransaction) throw new WalletNotConnectedError()
+        const toPublicKey = new PublicKey(toPubkey)
+        const mint = new PublicKey('MINT ADDRESS')
 
-    // Get the token account of the toWallet, create it if it does not exist
-    const toTokenAccount = await getOrCreateAssociatedTokenAccount(
-        connection,
-        from,
-        mint,
-        to,
-    );
+        const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
+            connection,
+            publicKey,
+            mint,
+            publicKey,
+            signTransaction
+        )
 
-    // Transfer to toTokenAccount
-    let signature = await transfer(
-        connection,
-        from,
-        fromTokenAccount.address,
-        toTokenAccount.address,
-        from,
-        1000000000,
-        []
-    );
-    console.log('transfer tx:', signature);
+        const toTokenAccount = await getOrCreateAssociatedTokenAccount(
+            connection,
+            publicKey,
+            mint,
+            toPublicKey,
+            signTransaction
+        )
+
+        const transaction = new Transaction().add(
+            createTransferInstruction(
+                fromTokenAccount.address,
+                toTokenAccount.address,
+                publicKey,
+                1 * LAMPORTS_PER_SOL,
+                [],
+                TOKEN_PROGRAM_ID
+            )
+        )
+
+        const blockHash = await connection.getLatestBlockhash()
+        transaction.feePayer = await publicKey
+        transaction.recentBlockhash = await blockHash.blockhash
+        const signed = await signTransaction(transaction)
+
+        await connection.sendRawTransaction(signed.serialize())
+
+    } catch (error: any) {
+        Error("Ekkkkkk whyyyyy!")
+    }
+
 }
