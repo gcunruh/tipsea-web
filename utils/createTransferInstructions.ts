@@ -1,7 +1,7 @@
 // createTransferInstructions.ts
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { AccountMeta, PublicKey, Signer, TransactionInstruction } from '@solana/web3.js'
-import BufferLayout from '@solana/buffer-layout'
+import BufferLayout from 'buffer-layout'
 import BN from 'bn.js'
 
 export enum TokenInstruction {
