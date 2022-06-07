@@ -5,14 +5,14 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { getOrCreateAssociatedTokenAccount } from './getOrCreateAssociatedTokenAccount'
 import { createTransferInstruction } from './createTransferInstructions'
 
-export const transferNFT = async (toPubkey: string) => {
+export const transferNFT = async (toPubkey: string, mintAddress: string) => {
     const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
     const { publicKey, signTransaction, sendTransaction} = useWallet();
 
     try {
         if (!publicKey || !signTransaction) throw new WalletNotConnectedError()
         const toPublicKey = new PublicKey(toPubkey)
-        const mint = new PublicKey('MINT ADDRESS')
+        const mint = new PublicKey(mintAddress)
 
         const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
             connection,
