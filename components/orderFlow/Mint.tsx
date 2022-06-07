@@ -32,7 +32,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
                 <Box>
                     <div className="flex flex-col mb-6">
                         <div className="text-right text-gray-400 mr-2">
-                            I'm a future NFT :-)
+                            I&apos;m a future NFT :-)
                         </div>
                         <div className="flex flex-row">
                             <img className="w-1/2 px-6" src={orderOptions.find(element => element.id === selectedOrder)?.imageSrc} />

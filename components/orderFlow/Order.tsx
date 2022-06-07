@@ -19,7 +19,7 @@ export default function Order({ orderOptions, selectedOrder, handleOrderSelect, 
         <>
             <div className="grid grid-cols-4">
                 {orderOptions.map((order, orderIdx) => (
-                    <OrderTile id={order.id} name={order.name} imageSrc={order.imageSrc} selected={order.id === selectedOrder ? true : false} onClick={handleOrderSelect} />
+                    <OrderTile key={order.id} id={order.id} name={order.name} imageSrc={order.imageSrc} selected={order.id === selectedOrder ? true : false} onClick={handleOrderSelect} />
                 ))
 
                 }
