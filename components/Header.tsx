@@ -1,5 +1,6 @@
 import Button from "./Button";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import {
     WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';

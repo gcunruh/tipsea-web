@@ -1,3 +1,6 @@
+import fx from "fireworks";
+import { useEffect } from "react";
+
 import Box from "../Box";
 import Button from "../Button";
 
@@ -33,6 +36,29 @@ const SendLoading = () => {
 }
 
 export default function Send({ fields, orderOptions, selectedOrder, nextStep, prevStep }:SendProps) {
+    let range = (n: number) => [...new Array(n)]
+    let x = 0
+
+    async function fireworks() {
+        range(6).map(() => 
+            fx({
+                x: Math.random() * window.innerWidth / 1.15,
+                y: Math.random() * 400,
+                colors: ['#014E68', '#3E5C68', '#4091B1']
+            })
+        )
+    }
+
+    useEffect(() => {
+        fireworks()
+        setTimeout(() => {
+            fireworks()
+        }, 1000)
+    }, []);
+
+
+
+
     return (
         <>
             <div className="flex flex-col mb-24">

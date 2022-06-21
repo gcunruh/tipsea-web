@@ -21,7 +21,7 @@ export const resolveSOLDomain = async (domain: string) => {
         return owner.registry.owner.toBase58();
 
     } catch (error) {
-        return false
+        return Error("NO NO NO")
     }
 
 }

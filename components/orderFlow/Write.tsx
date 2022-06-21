@@ -18,16 +18,20 @@ type WriteProps = {
 
 export default function Write({ fields, handleChange, nextStep, prevStep }:WriteProps) {
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         try {
             if (fields.to.includes(".sol")) {
-                const resolvedDomain = resolveSOLDomain(fields.to);
-                return resolvedDomain
+                const resolvedDomain = await resolveSOLDomain(fields.to);
+                console.log(resolvedDomain);
+                await nextStep();
             } else {
-                return validateSolanaAddress(fields.to)
+                const resolvedAddress =  await validateSolanaAddress(fields.to)
+                console.log(resolvedAddress);
+                await nextStep();
             }
         } catch (error) {
-            return Error("Something ain't right")
+            console.log("Error!!")
+            return Error("Ruh Roh!")
         }
     }
 
@@ -44,7 +48,7 @@ export default function Write({ fields, handleChange, nextStep, prevStep }:Write
                     </Button>
                 </div>
                 <div className={"w-44 " + ((fields.to.length > 0 && fields.message.length > 0) ? "" : "invisible")}>
-                    <Button style="filled" onClick={nextStep}>
+                    <Button style="filled" onClick={handleSubmit}>
                         Next
                     </Button>
                 </div>
