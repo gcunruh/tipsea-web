@@ -15,7 +15,7 @@ const selectedStyles = "bg-cyan-800"
 
 export default function OrderTile({ id, name, onClick, imageSrc, selected }: OrderTileProps) {
     return (
-        <div onClick={() => onClick(id)} className="group relative p-4 rounded-md">
+        <div onClick={() => onClick(id)} className="group relative px-2 py-3 md:p-4 rounded-md">
             <div className="absolute right-0 top-0 z-40">
                 <CheckCircleIcon className={"h-12 w-12 text-white bg-neutral-200 rounded-full " + (selected ? selectedStyles : unSelectedStyles) }/>
             </div>

@@ -18,12 +18,14 @@ export default function Header() {
                 </div>
             </Link>
             <nav className="flex flex-row gap-6 font-medium mr-2 items-center">
-                <div>
+                <div className="hidden md:inline-block">
                     Notify Me
                 </div>
-                <Link href="/leaderboard">
+                <div className="hidden md:inline-block">
+                <Link  href="/leaderboard">
                     Leaderboard
                 </Link>
+                </div>
                 <div>
                     <WalletMultiButton />
                 </div>

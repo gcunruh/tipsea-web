@@ -17,7 +17,7 @@ type OrderProps = {
 export default function Order({ orderOptions, selectedOrder, handleOrderSelect, nextStep}: OrderProps) {
     return (
         <>
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-2 md:grid-cols-4">
                 {orderOptions.map((order, orderIdx) => (
                     <OrderTile key={order.id} id={order.id} name={order.name} imageSrc={order.imageSrc} selected={order.id === selectedOrder ? true : false} onClick={handleOrderSelect} />
                 ))

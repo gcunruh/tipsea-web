@@ -68,11 +68,11 @@ const Home: NextPage = () => {
 
   return (
     <Layout>
-      <div className="flex flex-row justify-around mx-12 mt-5">
-        <div className="w-1/4">
+      <div className="flex flex-col md:flex-row justify-start md:justify-around mx-5 md:mx-12 mt-5">
+        <div className="w-full md:w-1/4">
           <Menu steps={steps} currentStep={step}/>
         </div>
-        <div className="w-3/4">
+        <div className="w-full md:w-3/4">
           {
             step < 4 ? steps[step].component : 
               <div className="flex flex-col justify-center mt-2 mb-44">

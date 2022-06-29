@@ -66,13 +66,13 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
                     Mint Successful!
                 </div>
                 <Box>
-                    <div className="flex flex-col mb-6">
-                        <div className="text-right text-gray-400 mr-2">
-                            I&apos;m a NFT :-)
+                    <div className="flex flex-col mb-2 md:mb-6">
+                        <div className="text-right text-gray-400 mr-4 md:mr-2 my-2 md:my-0">
+                            I&apos;m a NFT!
                         </div>
-                        <div className="flex flex-row">
-                            <img className="w-1/2 px-6" src={orderOptions.find(element => element.id === selectedOrder)?.imageSrc} />
-                            <div className="w-1/2">
+                        <div className="flex flex-col md:flex-row">
+                            <img className="w-full md:w-1/2 px-4 md:px-6" src={orderOptions.find(element => element.id === selectedOrder)?.imageSrc} />
+                            <div className="w-full md:w-1/2 px-4 md:px-0 my-4 md:my-0">
                                 <label className="mt-1 block text-sm font-bold text-cyan-900">
                                     To
                                 </label>
@@ -95,10 +95,10 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
                         </div>
                     </div>
                 </Box>
-                <div className="flex flex-row justify-end mt-2">
+                <div className="my-2 md:my-0 w-full">
                     <div>
-                        <div className="flex flex-row justify-end">
-                            <div className={"w-44 " + ((fields.to.length > 0 && fields.message.length > 0) ? "" : "invisible")}>
+                        <div className="w-full">
+                            <div className={"w-full md:w-44 " + ((fields.to.length > 0 && fields.message.length > 0) ? "" : "invisible")}>
                                 <Button style="filled" onClick={nextStep}>
                                     Send NFT
                                 </Button>
@@ -107,7 +107,7 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
                     </div>
                 </div>
             </div>
-            <SendLoading />
+            {/* <SendLoading /> */}
         </>
     )
 }

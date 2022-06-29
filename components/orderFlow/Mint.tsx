@@ -45,7 +45,11 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     );
     const { publicKey, wallet, signTransaction, signAllTransactions } = useWallet();
     if (!wallet || !publicKey || !signTransaction || !signAllTransactions) {
-    return;
+        return(
+            <div>
+                Error: No wallet connected!!
+            </div>
+        );
     }
     const signerWallet = {
     publicKey: publicKey,
@@ -56,15 +60,11 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     async function uploadMetadata() {
         const S3_BUCKET = 'tipsea'
         const REGION = 'us-west-2'
-        AWS.config.update({
+
+        const s3 = new AWS.S3({
             accessKeyId: "AKIA6C5ZLOVI2QE5B56B",
             secretAccessKey: "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"
-        })
-
-        const myBucket = new AWS.S3({
-            params: { Bucket: S3_BUCKET },
-            region: REGION
-        })
+        });
 
         var dictstring = JSON.stringify(
             {
@@ -103,18 +103,19 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
 
         var buf = Buffer.from(dictstring)
 
-        const uploadFile = (file: any) => {
-
-            const params = {
-                ACL: "public-read",
-                Body: file,
-                Bucket: S3_BUCKET,
-                Key: uuid+".json"
-            }
-            myBucket.putObject(params)
+        const params = {
+            Body: buf,
+            Bucket: S3_BUCKET,
+            Key: uuid+".json",
         }
 
-        uploadFile(buf);
+        s3.putObject(params, function(err, data) {
+        if (err) {
+            return alert("There was an error creating: " + err.message);
+        }
+        alert("Successfully created.");
+        });
+
     }  
 
     async function getProvider() {
@@ -235,9 +236,9 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     }
 
     async function handleSubmit() {
-        setLoading(true);
-        await uploadMetadata();
-        await mint_nft();
+        // setLoading(true);
+        // await uploadMetadata();
+        // await mint_nft();
         nextStep();
     }
 
@@ -252,13 +253,13 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
                     NFT Preview
                 </div>
                 <Box>
-                    <div className="flex flex-col mb-6">
-                        <div className="text-right text-gray-400 mr-2">
-                            I&apos;m a future NFT :-)
+                    <div className="flex flex-col mb-2 md:mb-6">
+                        <div className="text-right text-gray-400 mr-4 md:mr-2 my-2 md:my-0">
+                            I&apos;m a future NFT!
                         </div>
-                        <div className="flex flex-row">
-                            <img className="w-1/2 px-6" src={orderOptions.find(element => element.id === selectedOrder)?.imageSrc} />
-                            <div className="w-1/2">
+                        <div className="flex flex-col md:flex-row">
+                            <img className="w-full md:w-1/2 px-4 md:px-6" src={orderOptions.find(element => element.id === selectedOrder)?.imageSrc} />
+                            <div className="w-full md:w-1/2 px-4 md:px-0 my-4 md:my-0">
                                 <label className="mt-1 block text-sm font-bold text-cyan-900">
                                     To
                                 </label>
@@ -281,13 +282,13 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
                         </div>
                     </div>
                 </Box>
-                <div className="flex flex-row justify-between mt-2">
-                    <div className="text-gray-400 w-2/5">
+                <div className="flex flex-col-reverse md:flex-row justify-between mt-2">
+                    <div className="text-gray-400 my-4 md:my-0 w-full md:w-2/5">
                         We mint the NFT with your personalized message in the metadata
                     </div>
                     <div>
-                        <div className="flex flex-row justify-end">
-                            <div className={"mr-4 w-44 " + (1 < 0 ? "invisible" : "")}>
+                        <div className="flex flex-col md:flex-row justify-end">
+                            <div className={"mr-4 w-full md:w-44 " + (1 < 0 ? "invisible" : "")}>
                                 <Button style="default" onClick={prevStep}>
                                     Previous
                                 </Button>
