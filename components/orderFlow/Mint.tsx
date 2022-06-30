@@ -38,7 +38,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     const [uuid, setUuid] = useState(uuidv4());
     const [loading, setLoading] = useState(false);
     const programID = new PublicKey(idl.metadata.address);
-    const creatorKey = new PublicKey("4m5Jv1G2Ch2irCNYRwg9tY22Q5psNnJkcTM9qcg7nLSo");
+    const creatorKey = new PublicKey("AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ");
     const { SystemProgram } = web3;
     const TOKEN_METADATA_PROGRAM_ID = new web3.PublicKey(
         "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
@@ -59,61 +59,65 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
 
     async function uploadMetadata() {
         const S3_BUCKET = 'tipsea'
-        const REGION = 'us-west-2'
+
+        AWS.config.update({ region: 'us-west-2' })
 
         const s3 = new AWS.S3({
             accessKeyId: "AKIA6C5ZLOVI2QE5B56B",
             secretAccessKey: "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"
         });
 
-        var dictstring = JSON.stringify(
-            {
-                name: orderOptions.find(element => element.id === selectedOrder)?.name,
-                symbol: orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
-                description: fields.message,
-                seller_fee_basis: 420,
-                external_url: "https://tipsea-web.vercel.app/",
-                edition: "1",
-                background_color: "000000",
-                atrributes: [
-                    {
-                        trait_type: "Sender",
-                        value: publicKey
-                    },
-                    {
-                        trait_type: "Receiver",
-                        value: fields.to
-                    }
-
-                ],
-                properties: {
-                    category: "image",
-                    creators: [{
-                        address: publicKey,
-                        share: 100
-                    }],
-                    "files": [{
-                        uri: "https://tipsea.s3.us-west-2.amazonaws.com/" + orderOptions.find(element => element.id === selectedOrder)?.name.replace(" ", "_").toLowerCase() + ".png",
-                        type: "image/png"
-                    }]
+        var dictstring = {
+            name: orderOptions.find(element => element.id === selectedOrder)?.name,
+            symbol: orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
+            description: fields.message,
+            seller_fee_basis: 420,
+            external_url: "https://tipsea-web.vercel.app/",
+            edition: "1",
+            background_color: "000000",
+            atrributes: [
+                {
+                    trait_type: "Sender",
+                    value: publicKey
                 },
-                "image": "https://tipsea.s3.us-west-2.amazonaws.com/" + orderOptions.find(element => element.id === selectedOrder)?.name.replace(" ", "_").toLowerCase() + ".png",
-            }
-        )
+                {
+                    trait_type: "Receiver",
+                    value: fields.to
+                }
 
-        var buf = Buffer.from(dictstring)
-
-        const params = {
-            Body: buf,
-            Bucket: S3_BUCKET,
-            Key: uuid + ".json",
+            ],
+            properties: {
+                category: "image",
+                creators: [{
+                    address: 'AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ',
+                    share: 100
+                }],
+                "files": [{
+                    uri: "https://tipsea.s3.us-west-2.amazonaws.com/" + orderOptions.find(element => element.id === selectedOrder)?.name.replace(" ", "_").toLowerCase() + ".png",
+                    type: "image/png"
+                }]
+            },
+            "image": "https://tipsea.s3.us-west-2.amazonaws.com/" + orderOptions.find(element => element.id === selectedOrder)?.name.replace(" ", "_").toLowerCase() + ".png",
         }
 
-        s3.putObject(params, function (err, data) {
+        var buf = Buffer.from(JSON.stringify(dictstring))
+
+        var data = {
+            Bucket: S3_BUCKET,
+            Key: `metadata/${uuid}.json`,
+            Body: buf,
+            ContentEncoding: 'base64',
+            ContentType: "application/json",
+            ACL: 'public-read'
+        };
+
+        s3.upload(data, function(err: any, data: any) {
             if (err) {
-                return alert("There was an error creating: " + err.message);
+                console.log(err);
+                console.log('Error uploading data: ', data);
+            } else {
+                console.log('Success!')
             }
-            alert("Successfully created.");
         });
 
     }
@@ -214,18 +218,19 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
 
         const tx = await program.rpc.mintNft(
             creatorKey,
-            `https://tipsea.s3.us-west-2.amazonaws.com/${uuid}.json`,
+            `https://tipsea.s3.us-west-2.amazonaws.com/metadata/${uuid}.json`,
             orderOptions.find(element => element.id === selectedOrder)?.name,
-            "TIPSEA",
+            orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
             {
                 accounts: {
-                    mintAuthority: signerWallet.publicKey,
+                    mintAuthority: "AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ",
                     mint: mintKey.publicKey,
                     tokenAccount: NftTokenAccount,
                     tokenProgram: TOKEN_PROGRAM_ID,
                     metadata: metadataAddress,
                     tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
                     payer: signerWallet.publicKey,
+                    creator: creatorKey,
                     systemProgram: SystemProgram.programId,
                     rent: web3.SYSVAR_RENT_PUBKEY,
                     masterEdition: masterEdition
@@ -236,8 +241,8 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     }
 
     async function handleSubmit() {
-        // setLoading(true);
-        // await uploadMetadata();
+        setLoading(true);
+        await uploadMetadata();
         // await mint_nft();
         nextStep();
     }

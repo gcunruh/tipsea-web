@@ -39,6 +39,11 @@
                 "isSigner": false
             },
             {
+                "name": "creator",
+                "isMut": true,
+                "isSigner": false
+            },
+            {
                 "name": "systemProgram",
                 "isMut": false,
                 "isSigner": false
@@ -81,9 +86,19 @@
             "code": 6001,
             "name": "MetadataCreateFailed",
             "msg": "Metadata account create failed!"
+        },
+        {
+            "code": 6002,
+            "name": "NotEnoughTokens",
+            "msg": "Not enough tokens to pay for this minting"
+        },
+        {
+            "code": 6003,
+            "name": "NotEnoughSOL",
+            "msg": "Not enough SOL to pay for this minting"
         }
     ],
     "metadata": {
-        "address": "4HMaj1cDxfbunTUW7Nrz7j1nKQRKqGoUt8r7pFQsAJd5"
+        "address": "61V6pS8v5ZY19tUrtMZAwUHuEJidx4aTViGXJ9pNsJXv"
     }
 }
