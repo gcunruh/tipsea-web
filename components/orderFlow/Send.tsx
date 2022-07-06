@@ -1,6 +1,7 @@
 import fx from "fireworks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
+import { transferNFT } from "../../utils/transferNFT";
 import Box from "../Box";
 import Button from "../Button";
 
@@ -21,6 +22,7 @@ type SendProps = {
     selectedOrder: number;
     nextStep: () => void;
     prevStep: () => void;
+    mintAddress: string;
 }
 
 const SendLoading = () => {
@@ -35,7 +37,8 @@ const SendLoading = () => {
     )
 }
 
-export default function Send({ fields, orderOptions, selectedOrder, nextStep, prevStep }:SendProps) {
+export default function Send({ fields, orderOptions, selectedOrder, nextStep, prevStep, mintAddress }:SendProps) {
+    const [loading, setLoading] = useState(false);
     let range = (n: number) => [...new Array(n)]
     let x = 0
 
@@ -57,10 +60,22 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
     }, []);
 
 
-
+    async function handleSubmit() {
+        if (mintAddress !== "") {
+            setLoading(true);
+            await transferNFT(fields.to, mintAddress);
+            nextStep();
+        } else {
+            console.log("Invalid mint address!")
+        }
+    }
 
     return (
         <>
+            {
+                loading ? 
+                <SendLoading />
+                :
             <div className="flex flex-col mb-24">
                 <div className="font-semibold mb-4">
                     Mint Successful!
@@ -99,7 +114,7 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
                     <div>
                         <div className="w-full">
                             <div className={"w-full md:w-44 " + ((fields.to.length > 0 && fields.message.length > 0) ? "" : "invisible")}>
-                                <Button style="filled" onClick={nextStep}>
+                                <Button style="filled" onClick={handleSubmit}>
                                     Send NFT
                                 </Button>
                             </div>
@@ -107,7 +122,7 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
                     </div>
                 </div>
             </div>
-            {/* <SendLoading /> */}
+            }
         </>
     )
 }

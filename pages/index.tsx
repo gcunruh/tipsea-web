@@ -21,6 +21,7 @@ const Home: NextPage = () => {
     to: '',
     message: '',
   })
+  const [mintAddress, setMintAddress] = useState("");
 
   const orderOptions = [
     { id: 0, name: "Mojito", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mojito.png" },
@@ -63,7 +64,7 @@ const Home: NextPage = () => {
     { id: 0, component: <Order orderOptions={orderOptions} selectedOrder={selectedOrder} handleOrderSelect={handleOrderSelect} nextStep={nextStep} />, name: "Order" },
     { id: 1, component: <Write fields={fields} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} />, name: "Write your Message" },
     { id: 2, component: <Mint fields={fields} orderOptions={orderOptions} selectedOrder={selectedOrder} nextStep={nextStep} prevStep={prevStep} />, name: "Preview & Mint" },
-    { id: 3, component: <Send fields={fields} orderOptions={orderOptions} selectedOrder={selectedOrder} nextStep={nextStep} prevStep={prevStep} />, name: "Send" }
+    { id: 3, component: <Send fields={fields} orderOptions={orderOptions} selectedOrder={selectedOrder} nextStep={nextStep} prevStep={prevStep} mintAddress={mintAddress} />, name: "Send" }
   ]
 
   return (

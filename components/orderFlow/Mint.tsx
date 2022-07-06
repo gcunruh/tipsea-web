@@ -243,7 +243,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     async function handleSubmit() {
         setLoading(true);
         await uploadMetadata();
-        // await mint_nft();
+        await mint_nft();
         nextStep();
     }
 
