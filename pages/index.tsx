@@ -25,16 +25,16 @@ const Home: NextPage = () => {
   const orderOptions = [
     { id: 0, name: "Mojito", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mojito.png" },
     { id: 1, name: "Old Fashioned", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/old_fashioned.png" },
-    { id: 2, name: "Negroni", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/negroni.png" },
-    { id: 3, name: "Daiquiri", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/daiquiri.png" },
-    { id: 4, name: "Whiskey Sour", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/whiskey_sour.png" },
+    { id: 2, name: "Cosmopolitan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/cosmopolitan.png" },
+    { id: 3, name: "Gin and Tonic", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/gin_tonic.png" },
+    { id: 4, name: "Bahama Breeze", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/bahama_breeze.png" },
     { id: 5, name: "Martini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/martini.png" },
     { id: 6, name: "Margarita", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/margarita.png" },
     { id: 7, name: "Manhattan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/manhattan.png" },
-    { id: 8, name: "Aperol Spritz", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/aperol_spritz.png" },
-    { id: 9, name: "Mule", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mule.png" },
+    { id: 8, name: "Spritz", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/spritz.png" },
+    { id: 9, name: "Bloody Mary", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/bloody_mary.png" },
     { id: 10, name: "Pina Colada", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/pina_colada.png" },
-    { id: 11, name: "Sazerac", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/sazerac.png" },
+    { id: 11, name: "Tom Collins", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/tom_collins.png" },
   ]
 
   const prevStep = () => {
