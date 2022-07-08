@@ -115,7 +115,7 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
 
     const mint_tx = new web3.Transaction().add(
       createAssociatedTokenAccountInstruction(
-        signerWallet.publicKey, toAta, new PublicKey("AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ"), newMintKey
+        signerWallet.publicKey, toAta, new PublicKey(toPubkey), new PublicKey(mintAddress)
       )
     )
 
