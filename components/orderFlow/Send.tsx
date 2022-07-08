@@ -60,7 +60,7 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
             fireworks()
         }, 1000)
     }, []);
-    
+
     if (!wallet || !publicKey || !signTransaction || !signAllTransactions) {
         return (
             <div>
@@ -122,14 +122,18 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
 
     await AnchorProvider.env().sendAndConfirm(mint_tx, []);
 
-    await program.methods.sendNft().accounts({
-      sender: signerWallet.publicKey,
-      from: fromAta,
-      receiver: toAta,
-      systemProgram: SystemProgram.programId,
-      tokenProgram: TOKEN_PROGRAM_ID,
-      rent: web3.SYSVAR_RENT_PUBKEY,
-    }).rpc()
+    await program.rpc.sendNft(
+        {
+            accounts: {
+                sender: signerWallet.publicKey,
+                from: fromAta,
+                receiver: toAta,
+                systemProgram: SystemProgram.programId,
+                tokenProgram: TOKEN_PROGRAM_ID,
+                rent: web3.SYSVAR_RENT_PUBKEY,
+            }
+        }
+    )
 
     }
 
