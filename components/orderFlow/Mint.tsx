@@ -87,7 +87,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
                 },
                 {
                     trait_type: "Redeemed",
-                    value: false
+                    value: "No"
                 }
             ],
             properties: {
