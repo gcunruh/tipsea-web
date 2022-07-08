@@ -72,7 +72,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             name: orderOptions.find(element => element.id === selectedOrder)?.name,
             symbol: orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
             description: fields.message,
-            seller_fee_basis: 420,
+            seller_fee_basis: 300,
             external_url: "https://tipsea-web.vercel.app/",
             edition: "1",
             background_color: "000000",
@@ -92,7 +92,12 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
                 creators: [{
                     address: 'AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ',
                     share: 100
-                }],
+                    },
+                    {
+                        address: publicKey,
+                        share: 0
+                    }
+                ],
                 "files": [{
                     uri: "https://tipsea.s3.us-west-2.amazonaws.com/" + orderOptions.find(element => element.id === selectedOrder)?.name.replace(" ", "_").toLowerCase() + ".png",
                     type: "image/png"
@@ -218,7 +223,6 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
         const masterEdition = await getMasterEdition(mintKey.publicKey);
 
         const tx = await program.rpc.mintNft(
-            mintKey.publicKey,
             `https://tipsea.s3.us-west-2.amazonaws.com/metadata/${uuid}.json`,
             orderOptions.find(element => element.id === selectedOrder)?.name,
             orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
