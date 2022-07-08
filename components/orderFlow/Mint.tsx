@@ -73,19 +73,22 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             symbol: orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
             description: fields.message,
             seller_fee_basis: 300,
-            external_url: "https://tipsea-web.vercel.app/",
+            external_url: "https://tipsea.xyz/",
             edition: "1",
             background_color: "000000",
             attributes: [
                 {
-                    trait_type: "Sender",
+                    trait_type: "OG Sender",
                     value: publicKey
                 },
                 {
-                    trait_type: "Receiver",
+                    trait_type: "OG Receiver",
                     value: fields.to
+                },
+                {
+                    trait_type: "Redeemed",
+                    value: false
                 }
-
             ],
             properties: {
                 category: "image",
@@ -222,7 +225,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
         const metadataAddress = await getMetadata(mintKey.publicKey);
         const masterEdition = await getMasterEdition(mintKey.publicKey);
 
-        const tx = await program.rpc.mintNft(
+        await program.rpc.mintNft(
             `https://tipsea.s3.us-west-2.amazonaws.com/metadata/${uuid}.json`,
             orderOptions.find(element => element.id === selectedOrder)?.name,
             orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),

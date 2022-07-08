@@ -26,16 +26,19 @@ const Home: NextPage = () => {
   const orderOptions = [
     { id: 0, name: "Mojito", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mojito.png" },
     { id: 1, name: "Old Fashioned", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/old_fashioned.png" },
-    { id: 2, name: "Cosmopolitan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/cosmopolitan.png" },
+    { id: 2, name: "Cosmopolitan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/cosmo.png" },
     { id: 3, name: "Gin and Tonic", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/gin_tonic.png" },
-    { id: 4, name: "Bahama Breeze", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/bahama_breeze.png" },
-    { id: 5, name: "Martini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/martini.png" },
-    { id: 6, name: "Margarita", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/margarita.png" },
-    { id: 7, name: "Manhattan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/manhattan.png" },
-    { id: 8, name: "Spritz", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/spritz.png" },
-    { id: 9, name: "Bloody Mary", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/bloody_mary.png" },
-    { id: 10, name: "Pina Colada", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/pina_colada.png" },
-    { id: 11, name: "Tom Collins", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/tom_collins.png" },
+    { id: 4, name: "Martini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/martini.png" },
+    { id: 5, name: "Margarita", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/margarita.png" },
+    { id: 6, name: "Manhattan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/manhattan.png" },
+    { id: 7, name: "Mule", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mule.png" },
+    { id: 8, name: "Latte", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/latte.png" },
+    { id: 9, name: "Espresso", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/espresso.png" },
+    { id: 10, name: "Flat White", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/flat_white.png" },
+    { id: 11, name: "Espresso Martini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/espresso_martini.png" },
+    { id: 12, name: "Pina Colada", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/pina_colada.png" },
+    { id: 13, name: "Bellini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/bellini.png" },
+    { id: 14, name: "Sangria", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/sangria.png" },
   ]
 
   const prevStep = () => {

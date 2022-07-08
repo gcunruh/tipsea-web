@@ -1,12 +1,15 @@
 import fx from "fireworks";
 import { useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { clusterApiUrl, Connection, Transaction, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID, createInitializeMintInstruction, createAssociatedTokenAccountInstruction, MINT_SIZE } from "@solana/spl-token";
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base'
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { useConnection, WalletContextState } from "@solana/wallet-adapter-react";
-import { getOrCreateAssociatedTokenAccount } from "../../utils/getOrCreateAssociatedTokenAccount";
-import { createTransferInstruction } from '../../utils/createTransferInstructions';
+import {
+    Program, AnchorProvider, SystemProgram, web3
+} from '@project-serum/anchor';
+import { Connection, PublicKey } from '@solana/web3.js';
+import idl from "../../idl.json";
+
 
 import Box from "../Box";
 import Button from "../Button";
@@ -45,9 +48,23 @@ const SendLoading = () => {
 
 export default function Send({ fields, orderOptions, selectedOrder, nextStep, prevStep, mintAddress }:SendProps) {
     const [loading, setLoading] = useState(false);
-    const { publicKey, signTransaction, sendTransaction} = useWallet();
+    const programID = new PublicKey(idl.metadata.address);
+    const { SystemProgram } = web3;
     let range = (n: number) => [...new Array(n)]
     let x = 0
+    const { publicKey, wallet, signTransaction, signAllTransactions } = useWallet();
+    if (!wallet || !publicKey || !signTransaction || !signAllTransactions) {
+        return (
+            <div>
+                Error: No wallet connected!!
+            </div>
+        );
+    }
+    const signerWallet = {
+        publicKey: publicKey,
+        signTransaction: signTransaction,
+        signAllTransactions: signAllTransactions,
+    };
 
     async function fireworks() {
         range(6).map(() => 
@@ -66,51 +83,52 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
         }, 1000)
     }, []);
 
+    async function getProvider() {
+        /* create the provider and return it to the caller */
+        /* network set to local network for now */
+        const network = "https://wild-spring-violet.solana-devnet.quiknode.pro/a9a498c23b69394b859564240737cdc608f4e918/";
+        const connection = new Connection(network, "processed");
+
+        const provider = new AnchorProvider(
+            connection, signerWallet, { preflightCommitment: "processed" },
+        );
+        return provider;
+    }
+
     const transferNFT = async (toPubkey: string, mintAddress: string) => {
-        const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+        const provider = await getProvider();
+        const program = new Program(idl as any, programID, provider)
 
-        try {
-            if (!publicKey || !signTransaction) throw new WalletNotConnectedError()
-            const toPublicKey = new PublicKey(toPubkey)
-            const mint = new PublicKey(mintAddress)
+        const fromAta = await getAssociatedTokenAddress(
+            new PublicKey(mintAddress),
+            signerWallet.publicKey
+        )
 
-            const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
-                connection,
-                publicKey,
-                mint,
-                publicKey,
-                signTransaction
-            )
+        const toAta = await getAssociatedTokenAddress(
+            new PublicKey(mintAddress), // mint
+            new PublicKey(toPubkey) // owner
+        );
 
-            const toTokenAccount = await getOrCreateAssociatedTokenAccount(
-                connection,
-                publicKey,
-                mint,
-                toPublicKey,
-                signTransaction
-            )
+        console.log(`Mint Key: ${mintAddress}`);
+        console.log(`fromAta: ${fromAta}`);
+        console.log(`toAta: ${toAta}`);
 
-            const transaction = new Transaction().add(
-                createTransferInstruction(
-                    fromTokenAccount.address,
-                    toTokenAccount.address,
-                    publicKey,
-                    1 * LAMPORTS_PER_SOL,
-                    [],
-                    TOKEN_PROGRAM_ID
-                )
-            )
+    const mint_tx = new web3.Transaction().add(
+      createAssociatedTokenAccountInstruction(
+        signerWallet.publicKey, toAta, new PublicKey("AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ"), newMintKey
+      )
+    )
 
-            const blockHash = await connection.getLatestBlockhash()
-            transaction.feePayer = await publicKey
-            transaction.recentBlockhash = await blockHash.blockhash
-            const signed = await signTransaction(transaction)
+    await AnchorProvider.env().sendAndConfirm(mint_tx, []);
 
-            await connection.sendRawTransaction(signed.serialize())
-
-        } catch (error: any) {
-            Error("Ekkkkkk whyyyyy!")
-        }
+    await program.methods.sendNft().accounts({
+      sender: signerWallet.publicKey,
+      from: fromAta,
+      receiver: toAta,
+      systemProgram: SystemProgram.programId,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      rent: web3.SYSVAR_RENT_PUBKEY,
+    }).rpc()
 
     }
 
