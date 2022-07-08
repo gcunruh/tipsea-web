@@ -32,9 +32,10 @@ type MintProps = {
     selectedOrder: number;
     nextStep: () => void;
     prevStep: () => void;
+    setMintAddress: (arg0: string) => void;
 }
 
-export default function Mint({ fields, orderOptions, selectedOrder, nextStep, prevStep }: MintProps) {
+export default function Mint({ fields, orderOptions, selectedOrder, nextStep, prevStep, setMintAddress }: MintProps) {
     const [uuid, setUuid] = useState(uuidv4());
     const [loading, setLoading] = useState(false);
     const programID = new PublicKey(idl.metadata.address);
@@ -217,7 +218,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
         const masterEdition = await getMasterEdition(mintKey.publicKey);
 
         const tx = await program.rpc.mintNft(
-            creatorKey,
+            mintKey.publicKey,
             `https://tipsea.s3.us-west-2.amazonaws.com/metadata/${uuid}.json`,
             orderOptions.find(element => element.id === selectedOrder)?.name,
             orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
@@ -238,6 +239,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             }
 
         )
+        setMintAddress(new PublicKey(mintKey.publicKey).toString());
     }
 
     async function handleSubmit() {

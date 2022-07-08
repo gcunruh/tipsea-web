@@ -63,7 +63,7 @@ const Home: NextPage = () => {
   const steps = [
     { id: 0, component: <Order orderOptions={orderOptions} selectedOrder={selectedOrder} handleOrderSelect={handleOrderSelect} nextStep={nextStep} />, name: "Order" },
     { id: 1, component: <Write fields={fields} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} />, name: "Write your Message" },
-    { id: 2, component: <Mint fields={fields} orderOptions={orderOptions} selectedOrder={selectedOrder} nextStep={nextStep} prevStep={prevStep} />, name: "Preview & Mint" },
+    { id: 2, component: <Mint fields={fields} orderOptions={orderOptions} selectedOrder={selectedOrder} nextStep={nextStep} prevStep={prevStep} setMintAddress={setMintAddress} />, name: "Preview & Mint" },
     { id: 3, component: <Send fields={fields} orderOptions={orderOptions} selectedOrder={selectedOrder} nextStep={nextStep} prevStep={prevStep} mintAddress={mintAddress} />, name: "Send" }
   ]
 
