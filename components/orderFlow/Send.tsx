@@ -48,7 +48,7 @@ const SendLoading = () => {
 
 export default function Send({ fields, orderOptions, selectedOrder, nextStep, prevStep, mintAddress }:SendProps) {
     const [loading, setLoading] = useState(false);
-    const programID = new PublicKey(idl.metadata.address);
+    const programID = new PublicKey(String(process.env.NEXT_PUBLIC_PROGRAM_ID));
     const { SystemProgram } = web3;
     let range = (n: number) => [...new Array(n)]
     let x = 0
@@ -87,7 +87,7 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
     async function getProvider() {
         /* create the provider and return it to the caller */
         /* network set to local network for now */
-        const network = "https://wild-spring-violet.solana-devnet.quiknode.pro/a9a498c23b69394b859564240737cdc608f4e918/";
+        const network = String(process.env.NEXT_PUBLIC_RPC_ENDPOINT);
         const connection = new Connection(network, "processed");
 
         const provider = new AnchorProvider(
@@ -120,7 +120,7 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
       )
     )
 
-    await AnchorProvider.env().sendAndConfirm(mint_tx, []);
+    const res = await program.provider.sendAndConfirm!(mint_tx, []);
 
     await program.rpc.sendNft(
         {

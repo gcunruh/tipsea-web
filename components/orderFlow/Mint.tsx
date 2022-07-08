@@ -38,7 +38,7 @@ type MintProps = {
 export default function Mint({ fields, orderOptions, selectedOrder, nextStep, prevStep, setMintAddress }: MintProps) {
     const [uuid, setUuid] = useState(uuidv4());
     const [loading, setLoading] = useState(false);
-    const programID = new PublicKey(idl.metadata.address);
+    const programID = new PublicKey(String(process.env.NEXT_PUBLIC_PROGRAM_ID));
     const creatorKey = new PublicKey("AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ");
     const { SystemProgram } = web3;
     const TOKEN_METADATA_PROGRAM_ID = new web3.PublicKey(
@@ -64,8 +64,8 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
         AWS.config.update({ region: 'us-west-2' })
 
         const s3 = new AWS.S3({
-            accessKeyId: "AKIA6C5ZLOVI2QE5B56B",
-            secretAccessKey: "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"
+            accessKeyId: String(process.env.NEXT_PUBLIC_S3_ACCESS_KEY),
+            secretAccessKey: String(process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY)
         });
 
         var dictstring = {
@@ -134,7 +134,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     async function getProvider() {
         /* create the provider and return it to the caller */
         /* network set to local network for now */
-        const network = "https://wild-spring-violet.solana-devnet.quiknode.pro/a9a498c23b69394b859564240737cdc608f4e918/";
+        const network = String(process.env.NEXT_PUBLIC_RPC_ENDPOINT);
         const connection = new Connection(network, "processed");
 
         const provider = new AnchorProvider(

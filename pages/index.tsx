@@ -83,9 +83,11 @@ const Home: NextPage = () => {
                   Congrats! You just sent a Tipsea! Thanks for being a good friend :-)
                 </div>
                 <div className="w-44">
+                  <a href={`https://solscan.io/token/${mintAddress}` + process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "?cluster=devnet" : ""}>
                   <Button style="filled">
                     View on Solscan
                   </Button>
+                  </a>
                 </div>
               </div>
           }
