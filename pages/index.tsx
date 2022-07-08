@@ -29,15 +29,15 @@ const Home: NextPage = () => {
     { id: 2, name: "Gin and Tonic", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/gin_tonic.png" },
     { id: 3, name: "Pina Colada", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/pina_colada.png" },
     { id: 4, name: "Margarita", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/margarita.png" },
-    { id: 5, name: "Mule", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mule.png" },
-    { id: 6, name: "Manhattan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/manhattan.png" },
+    { id: 5, name: "Espresso Martini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/espresso_martini.png" },
+    { id: 6, name: "Mule", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/mule.png" },
     { id: 7, name: "Latte", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/latte.png" },
     { id: 8, name: "Espresso", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/espresso.png" },
     { id: 9, name: "Flat White", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/flat_white.png" },
-    { id: 10, name: "Espresso Martini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/espresso_martini.png" },
-    { id: 11, name: "Cosmopolitan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/cosmo.png" },
-    { id: 12, name: "Bellini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/bellini.png" },
-    { id: 13, name: "Sangria", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/sangria.png" },
+    { id: 10, name: "Cosmopolitan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/cosmo.png" },
+    { id: 11, name: "Bellini", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/bellini.png" },
+    { id: 12, name: "Sangria", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/sangria.png" },
+    { id: 13, name: "Manhattan", imageSrc: "https://tipsea.s3.us-west-2.amazonaws.com/manhattan.png" },
   ]
 
   const prevStep = () => {
