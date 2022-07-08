@@ -1,7 +1,13 @@
 import fx from "fireworks";
 import { useEffect, useState } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { clusterApiUrl, Connection, Transaction, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { WalletNotConnectedError } from '@solana/wallet-adapter-base'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { useConnection, WalletContextState } from "@solana/wallet-adapter-react";
+import { getOrCreateAssociatedTokenAccount } from "../../utils/getOrCreateAssociatedTokenAccount";
+import { createTransferInstruction } from '../../utils/createTransferInstructions';
 
-import { transferNFT } from "../../utils/transferNFT";
 import Box from "../Box";
 import Button from "../Button";
 
@@ -39,6 +45,7 @@ const SendLoading = () => {
 
 export default function Send({ fields, orderOptions, selectedOrder, nextStep, prevStep, mintAddress }:SendProps) {
     const [loading, setLoading] = useState(false);
+    const { publicKey, signTransaction, sendTransaction} = useWallet();
     let range = (n: number) => [...new Array(n)]
     let x = 0
 
@@ -58,6 +65,54 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
             fireworks()
         }, 1000)
     }, []);
+
+    const transferNFT = async (toPubkey: string, mintAddress: string) => {
+        const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+        try {
+            if (!publicKey || !signTransaction) throw new WalletNotConnectedError()
+            const toPublicKey = new PublicKey(toPubkey)
+            const mint = new PublicKey(mintAddress)
+
+            const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
+                connection,
+                publicKey,
+                mint,
+                publicKey,
+                signTransaction
+            )
+
+            const toTokenAccount = await getOrCreateAssociatedTokenAccount(
+                connection,
+                publicKey,
+                mint,
+                toPublicKey,
+                signTransaction
+            )
+
+            const transaction = new Transaction().add(
+                createTransferInstruction(
+                    fromTokenAccount.address,
+                    toTokenAccount.address,
+                    publicKey,
+                    1 * LAMPORTS_PER_SOL,
+                    [],
+                    TOKEN_PROGRAM_ID
+                )
+            )
+
+            const blockHash = await connection.getLatestBlockhash()
+            transaction.feePayer = await publicKey
+            transaction.recentBlockhash = await blockHash.blockhash
+            const signed = await signTransaction(transaction)
+
+            await connection.sendRawTransaction(signed.serialize())
+
+        } catch (error: any) {
+            Error("Ekkkkkk whyyyyy!")
+        }
+
+    }
 
 
     async function handleSubmit() {

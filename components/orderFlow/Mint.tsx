@@ -76,7 +76,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             external_url: "https://tipsea-web.vercel.app/",
             edition: "1",
             background_color: "000000",
-            atrributes: [
+            attributes: [
                 {
                     trait_type: "Sender",
                     value: publicKey
@@ -228,7 +228,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
             {
                 accounts: {
-                    mintAuthority: "AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ",
+                    mintAuthority: signerWallet.publicKey,
                     mint: mintKey.publicKey,
                     tokenAccount: NftTokenAccount,
                     tokenProgram: TOKEN_PROGRAM_ID,
@@ -306,7 +306,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
                                     </div>
                                     <div className={" " + ((fields.to.length > 0 && fields.message.length > 0) ? "" : "invisible")}>
                                         <Button style="filled" onClick={handleSubmit}>
-                                            Mint for 0.07 SOL
+                                            Mint for 0.3 SOL
                                         </Button>
                                     </div>
                                 </div>
