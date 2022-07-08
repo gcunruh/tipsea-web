@@ -53,6 +53,14 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
     let range = (n: number) => [...new Array(n)]
     let x = 0
     const { publicKey, wallet, signTransaction, signAllTransactions } = useWallet();
+
+    useEffect(() => {
+        fireworks()
+        setTimeout(() => {
+            fireworks()
+        }, 1000)
+    }, []);
+    
     if (!wallet || !publicKey || !signTransaction || !signAllTransactions) {
         return (
             <div>
@@ -75,13 +83,6 @@ export default function Send({ fields, orderOptions, selectedOrder, nextStep, pr
             })
         )
     }
-
-    useEffect(() => {
-        fireworks()
-        setTimeout(() => {
-            fireworks()
-        }, 1000)
-    }, []);
 
     async function getProvider() {
         /* create the provider and return it to the caller */
