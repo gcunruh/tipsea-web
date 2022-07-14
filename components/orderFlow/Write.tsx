@@ -1,3 +1,4 @@
+import React from "react";
 import InputLg from "../InputLg";
 import InputSm from "../InputSm";
 import Button from "../Button";
@@ -12,18 +13,21 @@ type Fields = {
     message: string;
 }
 
+type Errors = {
+    to: boolean;
+    message: boolean;
+}
+
 type WriteProps = {
     fields: Fields;
     handleChange: (e: any) => void;
+    errors: Errors;
+    setErrors: React.Dispatch<React.SetStateAction<any>>;
     nextStep: () => void;
     prevStep: () => void;
 }
 
-export default function Write({ fields, handleChange, nextStep, prevStep }:WriteProps) {
-    const [errors, setErrors] = useState({
-        address: false,
-        message: false
-    });
+export default function Write({ fields, handleChange, errors, setErrors, nextStep, prevStep }:WriteProps) {;
     const [activeErrorMessage, setActiveErrorMessage] = useState<string | null>(null);
 
     const handleSubmit = async () => {
@@ -40,16 +44,16 @@ export default function Write({ fields, handleChange, nextStep, prevStep }:Write
             }
         } catch (error) {
             if (error instanceof SolanaAddressValidationError) {
-                setErrors(data => {
+                setErrors((data: Errors) => {
                     const updatedData = { ...data };
-                    updatedData.address = true;
+                    updatedData.to = true;
                     return updatedData;
                 })
                 setActiveErrorMessage("Invalid Solana Address!")
             } else if (error instanceof SolanaDomainError) {
-                setErrors(data => {
+                setErrors((data: Errors) => {
                     const updatedData = { ...data };
-                    updatedData.address = true;
+                    updatedData.to = true;
                     return updatedData;
                 })
                 setActiveErrorMessage("Invalid Solana Domain!")
@@ -61,7 +65,7 @@ export default function Write({ fields, handleChange, nextStep, prevStep }:Write
     return (
         <>
             <div className="flex flex-col justify-end">
-                <InputSm label="Who is it going to?" placeholder="SOL address or .sol name" name="to" value={fields.to} handleChange={handleChange} error={errors.address} />
+                <InputSm label="Who is it going to?" placeholder="SOL address or .sol name" name="to" value={fields.to} handleChange={handleChange} error={errors.to} />
                 <InputLg label="What do you want to say?" placeholder="Have a drink on me :-)" name="message" value={fields.message} handleChange={handleChange} error={fields.message.length > 150} />
             </div>
             <div className="flex flex-col md:flex-row-reverse justify-between my-1">
