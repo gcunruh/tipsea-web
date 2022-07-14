@@ -3,8 +3,9 @@ import {
   getNameAccountKey,
   NameRegistryState,
 } from "@bonfida/spl-name-service";
-
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
+
+import { SolanaDomainError } from "./errors";
 
 export const resolveSOLDomain = async (domain: string) => {
     try {
@@ -21,7 +22,7 @@ export const resolveSOLDomain = async (domain: string) => {
         return owner.registry.owner.toBase58();
 
     } catch (error) {
-        return Error("NO NO NO")
+        throw new SolanaDomainError("Invalid Solana Domain!")
     }
 
 }
