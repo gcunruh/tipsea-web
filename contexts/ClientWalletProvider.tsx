@@ -23,6 +23,7 @@ export function ClientWalletProvider(
         () => [
             new PhantomWalletAdapter(),
             new GlowWalletAdapter(),
+            new SolflareWalletAdapter(),
             new SlopeWalletAdapter(),
             new TorusWalletAdapter(),
         ],

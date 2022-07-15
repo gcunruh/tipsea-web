@@ -13,6 +13,7 @@ import Order from '../components/orderFlow/Order'
 import Write from '../components/orderFlow/Write'
 import Mint from '../components/orderFlow/Mint'
 import Send from '../components/orderFlow/Send'
+import MobileHeader from '../components/MobileHeader'
 
 const Home: NextPage = () => {
   const [step, setStep] = useState(0);
