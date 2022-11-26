@@ -10,10 +10,13 @@ import Box from "../Box";
 import Button from "../Button";
 import Loading from "../Loading";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID, createInitializeMintInstruction, createAssociatedTokenAccountInstruction, MINT_SIZE } from "@solana/spl-token";
+import { TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, createInitializeMintInstruction, MINT_SIZE, ASSOCIATED_TOKEN_PROGRAM_ID, getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
+import { PROGRAM_ADDRESS } from '@metaplex-foundation/mpl-token-metadata';
 import { v4 as uuidv4 } from 'uuid';
 
 import AWS from "aws-sdk";
+
+const TOKEN_METADATA_PROGRAM_ID = new PublicKey( PROGRAM_ADDRESS );
 
 type Fields = {
     to: string;
@@ -39,11 +42,8 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
     const [uuid, setUuid] = useState(uuidv4());
     const [loading, setLoading] = useState(false);
     const programID = new PublicKey(String(process.env.NEXT_PUBLIC_PROGRAM_ID));
-    const creatorKey = new PublicKey("AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ");
+    const creatorKey = new PublicKey("Bw9yuLw62jk9Z2gjtNm8wdKkoYLZdPfJgDUrRNkTPVxM");
     const { SystemProgram } = web3;
-    const TOKEN_METADATA_PROGRAM_ID = new web3.PublicKey(
-        "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
-    );
     const { publicKey, wallet, signTransaction, signAllTransactions } = useWallet();
     if (!wallet || !publicKey || !signTransaction || !signAllTransactions) {
         return (
@@ -52,11 +52,6 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             </div>
         );
     }
-    const signerWallet = {
-        publicKey: publicKey,
-        signTransaction: signTransaction,
-        signAllTransactions: signAllTransactions,
-    };
 
     async function uploadMetadata() {
         const S3_BUCKET = 'tipsea'
@@ -72,17 +67,17 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             name: orderOptions.find(element => element.id === selectedOrder)?.name,
             symbol: orderOptions.find(element => element.id === selectedOrder)?.name.toUpperCase(),
             description: fields.message,
-            seller_fee_basis: 300,
+            seller_fee_basis: 0,
             external_url: "https://tipsea.xyz/",
             edition: "1",
             background_color: "000000",
             attributes: [
                 {
-                    trait_type: "OG Sender",
+                    trait_type: "Sender",
                     value: publicKey
                 },
                 {
-                    trait_type: "OG Receiver",
+                    trait_type: "Receiver",
                     value: fields.to
                 },
                 {
@@ -93,7 +88,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
             properties: {
                 category: "image",
                 creators: [{
-                    address: 'AAXzaxthXQTW6jnN7xJGVNiUeGqpDezMvqpMCd75D1nZ',
+                    address: '8a2z19H17vyQ89rmtR5tATWkGFutJ5gBWre2fthXimHa',
                     share: 100
                     },
                     {
@@ -138,7 +133,7 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
         const connection = new Connection(network, "processed");
 
         const provider = new AnchorProvider(
-            connection, signerWallet, { preflightCommitment: "processed" },
+            connection, wallet, { preflightCommitment: "processed" },
         );
         return provider;
     }
@@ -179,6 +174,13 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
         const program = new Program(idl as any, programID, provider)
         const mintKey: web3.Keypair = web3.Keypair.generate();
 
+        const lamports: number =
+        await program.provider.connection.getMinimumBalanceForRentExemption(
+          MINT_SIZE
+        );
+  
+        const mint_tx = new anchor.web3.Transaction();
+
 
         const NftTokenAccount = await getAssociatedTokenAddress(
             mintKey.publicKey,
@@ -186,32 +188,27 @@ export default function Mint({ fields, orderOptions, selectedOrder, nextStep, pr
         )
         console.log("NFT Account: ", NftTokenAccount.toBase58());
 
-        const lamports: number =
-            await program.provider.connection.getMinimumBalanceForRentExemption(
-                MINT_SIZE
-            );
-
-        const mint_tx = new web3.Transaction().add(
-            web3.SystemProgram.createAccount({
-                fromPubkey: signerWallet.publicKey,
-                newAccountPubkey: mintKey.publicKey,
-                space: MINT_SIZE,
-                programId: TOKEN_PROGRAM_ID,
-                lamports,
-            }),
+        mint_tx.add(
+            anchor.web3.SystemProgram.createAccount( {
+              fromPubkey: wallet.publicKey,
+              newAccountPubkey: mintKey.publicKey,
+              space: MINT_SIZE,
+              programId: TOKEN_PROGRAM_ID,
+              lamports,
+            } ),
             createInitializeMintInstruction(
-                mintKey.publicKey,
-                0,
-                signerWallet.publicKey,
-                signerWallet.publicKey
+              mintKey.publicKey,
+              0,
+              wallet.publicKey,
+              wallet.publicKey
             ),
             createAssociatedTokenAccountInstruction(
-                signerWallet.publicKey,
-                NftTokenAccount,
-                signerWallet.publicKey,
-                mintKey.publicKey
+              wallet.publicKey,
+              NftTokenAccount,
+              to_wallet.publicKey,
+              mintKey.publicKey
             )
-        );
+          );
 
         const res = await program.provider.sendAndConfirm!(mint_tx, [mintKey])
         console.log(

@@ -1,136 +1,291 @@
 {
     "version": "0.1.0",
     "name": "tipsea_solana",
-    "instructions": [{
-            "name": "mintNft",
-            "accounts": [{
-                    "name": "mintAuthority",
-                    "isMut": true,
-                    "isSigner": true
-                },
-                {
-                    "name": "mint",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "tokenProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "metadata",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "tokenAccount",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "tokenMetadataProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "payer",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "creator",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "systemProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "rent",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "masterEdition",
-                    "isMut": true,
-                    "isSigner": false
-                }
-            ],
-            "args": [{
-                    "name": "uri",
-                    "type": "string"
-                },
-                {
-                    "name": "title",
-                    "type": "string"
-                },
-                {
-                    "name": "symbol",
-                    "type": "string"
-                }
-            ]
-        },
-        {
-            "name": "sendNft",
-            "accounts": [{
-                    "name": "sender",
-                    "isMut": true,
-                    "isSigner": true
-                },
-                {
-                    "name": "from",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "receiver",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "systemProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "tokenProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "rent",
-                    "isMut": false,
-                    "isSigner": false
-                }
-            ],
-            "args": []
-        }
+    "instructions": [
+      {
+        "name": "initializeTipsea",
+        "accounts": [
+          {
+            "name": "initializer",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "fund",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "mint",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "tokenProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "rent",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": []
+      },
+      {
+        "name": "createTipsea",
+        "accounts": [
+          {
+            "name": "mintAuthority",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "mint",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "tokenProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "metadata",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "tokenAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "tokenMetadataProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "payer",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "fromAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "fund",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "rent",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "masterEdition",
+            "isMut": true,
+            "isSigner": false
+          }
+        ],
+        "args": [
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "creatorKey",
+            "type": "publicKey"
+          }
+        ]
+      },
+      {
+        "name": "redeem",
+        "accounts": [
+          {
+            "name": "signer",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "toAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "tokenMint",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "fund",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "mint",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "tokenAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "metadataAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "tokenMetadataProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "tokenProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "associatedTokenProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "rent",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": [
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      },
+      {
+        "name": "withdraw",
+        "accounts": [
+          {
+            "name": "authority",
+            "isMut": false,
+            "isSigner": true
+          },
+          {
+            "name": "toAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "fund",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "tokenMint",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "tokenProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "rent",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
     ],
-    "errors": [{
-            "code": 6000,
-            "name": "MintFailed",
-            "msg": "Mint failed!"
-        },
-        {
-            "code": 6001,
-            "name": "MetadataCreateFailed",
-            "msg": "Metadata account create failed!"
-        },
-        {
-            "code": 6002,
-            "name": "NotEnoughTokens",
-            "msg": "Not enough tokens to pay for this minting"
-        },
-        {
-            "code": 6003,
-            "name": "NotEnoughSOL",
-            "msg": "Not enough SOL to pay for this minting"
-        }
+    "errors": [
+      {
+        "code": 6000,
+        "name": "MintFailed",
+        "msg": "Mint failed!"
+      },
+      {
+        "code": 6001,
+        "name": "MetadataCreateFailed",
+        "msg": "Metadata account create failed!"
+      },
+      {
+        "code": 6002,
+        "name": "MasterCreateFailed",
+        "msg": "Master Edition create failed!"
+      },
+      {
+        "code": 6003,
+        "name": "NotEnoughTokens",
+        "msg": "Not enough tokens to pay for this minting"
+      },
+      {
+        "code": 6004,
+        "name": "NotEnoughSOL",
+        "msg": "Not enough SOL to pay for this minting"
+      },
+      {
+        "code": 6005,
+        "name": "NotInitialized",
+        "msg": "Not Initialized"
+      },
+      {
+        "code": 6006,
+        "name": "CreatorNotVerified",
+        "msg": "Creator is not verified"
+      },
+      {
+        "code": 6007,
+        "name": "Unauthorized",
+        "msg": "Unauthorized"
+      }
     ],
     "metadata": {
-        "address": "9gxkAobRDsTv3E5T8nteySZhYr4j87hC8K7b2ZiyqP5m"
+      "address": "Bw9yuLw62jk9Z2gjtNm8wdKkoYLZdPfJgDUrRNkTPVxM"
     }
-}
+  }
