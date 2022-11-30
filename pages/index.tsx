@@ -182,7 +182,7 @@ const Home: NextPage = () =>
         `https://tipsea.s3.us-west-2.amazonaws.com/metadata/${ uuid }.json`,
         orderOptions.find( element => element.id === selectedOrder )?.name,
         orderOptions.find( element => element.id === selectedOrder )?.name.replace(/\s+/g, '').toUpperCase().substring(0, 5),
-        new PublicKey( fields.to )
+        fields.to
       );
       setSignature( mint_tx );
     }
