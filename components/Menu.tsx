@@ -19,11 +19,11 @@ function classNames(...classes: string[]) {
 
 export default function Menu({ steps, currentStep, nextStep, prevStep }: MenuProps) {
   return (
-    <nav aria-label="Progress">
+    <nav aria-label="Progress" className='md:mb-4'>
       <ol role="list" className="flex flex-row md:flex-col justify-center md:justify-start">
         {steps.map((step, stepIdx) => (
           <li key={step.name} className={classNames(stepIdx !== steps.length - 1 ? 'pb-6' : '', 'relative')}>
-            {step.id < currentStep ? (
+            {step.id < currentStep || currentStep === 3 ? (
               <>
                 {stepIdx !== steps.length - 1 ? (
                   <div className="-ml-px absolute mt-[0.3rem] md:mt-0.5 top-3 left-12 md:left-3 h-0.5 w-full md:w-0.5 md:h-full bg-cyan-900 opacity-75" aria-hidden="true" />

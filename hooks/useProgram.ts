@@ -1,25 +1,18 @@
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { Idl, Program, AnchorProvider } from "@project-serum/anchor";
 import { useEffect, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { openRpcConnection } from "../utils/openRpcConnection";
 import idl from "../idl.json";
 
-export type Maybe<T> = T | null;
-
-export default function useProgram() {
-    const [ program, setProgram ] = useState<Maybe<Program<Idl>>>( null );
-    const { publicKey, wallet, signTransaction, signAllTransactions } = useWallet();
+export default function useProgram ()
+{
+    const [program, setProgram] = useState<Program<Idl>>();
+    const wallet = useAnchorWallet();
 
     useEffect( () =>
     {
-        const signerWallet = {
-            publicKey: publicKey,
-            signTransaction: signTransaction,
-            signAllTransactions: signAllTransactions,
-        };
-
-        if ( !wallet || !publicKey || !signTransaction || !signAllTransactions )
+        if ( wallet == null )
         {
             return;
         }
@@ -30,9 +23,11 @@ export default function useProgram() {
             preflightCommitment: "processed",
         };
         const provider = new AnchorProvider(
-            connection, signerWallet, opts,
+            connection, wallet, opts,
         );
-        const programInner = new Program( idl as Idl, programId, provider );
+        const programInner = new Program( idl as any, programId, provider );
         setProgram( programInner );
-    }, [ publicKey, signAllTransactions, signTransaction, wallet ] );
+    }, [ wallet ] );
+
+    return program;
 }

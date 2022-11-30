@@ -15,7 +15,7 @@ export const resolveSOLDomain = async (domain: string) => {
             new PublicKey("58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx")
         );
         const owner = await NameRegistryState.retrieve(
-            new Connection(clusterApiUrl("mainnet-beta")),
+            new Connection(process.env.NEXT_PUBLIC_RPC_ENDPOINT),
             nameAccountKey
         );
         return owner.registry.owner.toBase58();

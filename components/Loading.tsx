@@ -5,7 +5,7 @@ type LoadingProps = {
 export default function Loading({ text }:LoadingProps) {
     return (
         <div className="flex flex-col justify-center">
-            <img className="w-24" src="./trees.gif" />
+            <img alt="palm trees" className="w-24" src="./trees.gif" />
             <div className="my-2 font-semibold">
                 {text}
             </div> 

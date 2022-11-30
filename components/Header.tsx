@@ -19,11 +19,13 @@ export default function Header() {
             </Link>
             <nav className="flex flex-row gap-6 font-medium mr-2 items-center">
                 <div className="hidden md:inline-block">
-                    Notify Me
+                <Link  href="/">
+                    Order
+                </Link>
                 </div>
                 <div className="hidden md:inline-block">
-                <Link  href="/leaderboard">
-                    Leaderboard
+                <Link  href="/redeem">
+                    Redeem
                 </Link>
                 </div>
                 <div>

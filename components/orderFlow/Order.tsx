@@ -24,13 +24,13 @@ export default function Order({ orderOptions, selectedOrder, handleOrderSelect, 
 
                 }
             </div>
-            <div className="flex flex-row justify-center md:justify-end mt-2">
+            {/* <div className="flex flex-row justify-center md:justify-end mt-2">
                 <div className={"w-full md:w-44 " + (selectedOrder < 0 ? "invisible" : "")}>
                     <Button style="filled" onClick={nextStep}>
                         Next
                     </Button>
                 </div>
-            </div>
+            </div> */}
         </>
     )
 }
