@@ -23,6 +23,7 @@ import useProgram from "../hooks/useProgram";
 import { Connection, PublicKey } from '@solana/web3.js';
 import { resolveSOLDomain } from '../utils/resolveSOLDomain';
 import { validateSolanaAddress } from '../utils/validateSolanaAddress';
+import { toast } from 'react-hot-toast';
 
 
 const Home: NextPage = () =>
@@ -63,9 +64,18 @@ const Home: NextPage = () =>
     setStep( step - 1 );
   };
 
-  const nextStep = () =>
+  const nextStep = async () =>
   {
-    setStep( step + 1 );
+    if (step === 1) {
+      try {
+        await handleAddress();
+        setStep( step + 1 );
+      } catch (e) {
+        toast.error(`${e}`)
+      }
+    } else {
+      setStep( step + 1 );
+    }
   };
 
   const handleOrderSelect = ( orderId: number ) =>
@@ -86,15 +96,24 @@ const Home: NextPage = () =>
     } );
   };
 
-//   const handleAddress = async () => {
-//     if (fields.to.includes(".sol")) {
-//         const resolvedAddress = await resolveSOLDomain(fields.to);
-//         resolvedAddress && typeof(resolvedAddress) === "string" && setProperAddress(resolvedAddress);
-//     } else {
-//         const resolvedAddress = validateSolanaAddress(fields.to)
-//         resolvedAddress && setProperAddress(fields.to)
-//     }
-// }
+  const handleAddress = async () => {
+    if (fields.to.includes(".sol")) {
+      try {
+        const resolvedAddress = await resolveSOLDomain(fields.to);
+        setProperAddress(resolvedAddress);
+      } catch (error) {
+        throw Error("Invalid .sol Domain")
+      }
+    } else {
+        try {
+          const resolvedAddress = validateSolanaAddress(fields.to)
+          setProperAddress(fields.to);
+        } catch (error) {
+          throw Error("Invalid Solana Address")
+        }
+    }
+    console.log(properAddress);
+  }
 
   async function uploadMetadata ()
   {
@@ -167,7 +186,7 @@ const Home: NextPage = () =>
         console.log( 'Error uploading data: ', data );
       } else
       {
-        console.log( 'Success!' );
+        toast.success("Metadata Uploaded!")
       }
     } );
 
@@ -177,25 +196,34 @@ const Home: NextPage = () =>
   {
     if ( program )
     {
-      const mint_tx = await createTipsea(
-        program,
-        `https://tipsea.s3.us-west-2.amazonaws.com/metadata/${ uuid }.json`,
-        orderOptions.find( element => element.id === selectedOrder )?.name,
-        orderOptions.find( element => element.id === selectedOrder )?.name.replace(/\s+/g, '').toUpperCase().substring(0, 5),
-        fields.to
-      );
-      setSignature( mint_tx );
+      try {
+        const mint_tx = await createTipsea(
+          program,
+          `https://tipsea.s3.us-west-2.amazonaws.com/metadata/${ uuid }.json`,
+          orderOptions.find( element => element.id === selectedOrder )?.name,
+          orderOptions.find( element => element.id === selectedOrder )?.name.replace(/\s+/g, '').toUpperCase().substring(0, 5),
+          properAddress
+        );
+        setSignature( mint_tx );
+      } catch {
+        throw Error("Mint Failed!")
+      }
+
     }
   }
 
   async function handleMint ()
   {
     setLoading( true );
-    // await handleAddress();
-    // console.log(properAddress);
-    await uploadMetadata();
-    await mint_nft();
-    nextStep();
+    try {
+      await uploadMetadata();
+      await mint_nft();
+      nextStep();
+    } catch (error) {
+      toast.error("Error: Mint Failed")
+      setLoading( false );
+    }
+
   }
 
   const steps = [
@@ -257,7 +285,7 @@ const Home: NextPage = () =>
                   Congrats! You just sent a Tipsea!
                 </div>
                 <div className="w-full md:w-1/4 my-2">
-                  <a href={ `https://solscan.io/tx/${ signature }` + process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "?cluster=devnet" : "" }>
+                  <a href={ `https://solscan.io/tx/${ signature }` + (process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "?cluster=devnet" : "") }>
                     <Button style="filled">
                       View on Solscan
                     </Button>

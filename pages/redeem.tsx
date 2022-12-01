@@ -12,6 +12,8 @@ import { ensure } from '../utils/ensure';
 import { redeem } from '../utils/redeem';
 import Button from '../components/Button';
 import { useRouter } from 'next/router';
+import { toast } from 'react-hot-toast';
+import { sign } from 'crypto';
 
 export type Nft = {
     mint: PublicKey;
@@ -19,7 +21,7 @@ export type Nft = {
     description: string;
     imageUrl: string;
     creator: string;
-    // from: string;
+    from: string;
     redeemed: boolean;
 };
 
@@ -36,33 +38,53 @@ const Redeem: NextPage = () =>
 
     const ConnectView = <div className=" my-10 font-semibold text-center">
         Connect your wallet
-    </div>;
+    </div>
 
     const LoadingView = <div className="my-10 w-full text-center flex flex-col items-center">
         <Loading />
-    </div>;
+    </div>
 
-    const RedeemView = <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-4 md:gap-8">
+    const RedeemView = <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4 md:gap-8">
         { myNfts?.map( function ( item, i )
         {
-            return <RedeemTile key={ item.mint.toBase58() } id={ i } name={ item.title } imageSrc={ item.imageUrl } onClick={ () => { toRedeem.includes( item ) ? handleRemoveRedeem( item ) : handleAddRedeem( item ); } } selected={ toRedeem.includes( item ) } redeemed={ item.redeemed } from={ "firstwonk.sol" } />;
+            return <RedeemTile key={ item.mint.toBase58() } id={ i } name={ item.title } imageSrc={ item.imageUrl } message={item.description} from={item.from} onClick={ () => { item.redeemed ? null : toRedeem.includes( item ) ? handleRemoveRedeem( item ) : handleAddRedeem( item ); } } selected={ toRedeem.includes( item ) } redeemed={ item.redeemed } />;
         } ) }
-    </div>;
+    </div>
 
     const NoTipseaView = <div className=" my-10 font-semibold text-center">
         No Tipseas found!
-    </div>;
+    </div>
 
-    const SuccessView = <div className=" my-10 font-semibold text-center">
+    const SuccessView = <div className=" my-10 font-semibold text-left">
         You redeemed your Tipsea!
-        <div className={ "w-full md:w-44" }>
-            <a href={ `https://solscan.io/tx/${ signature }` + process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "?cluster=devnet" : "" }>
-                <Button style="filled">
-                    View on Solscan
-                </Button>
-            </a>
-        </div>;
-    </div>;
+        <div className="my-2 md:my-0 w-full">
+                    <div>
+                        <div className="w-full flex flex-col md:flex-row items-center gap-1 md:gap-4 my-2">
+                            <div className="w-full md:w-1/4">
+                                <a href={ `https://solscan.io/tx/${ signature }` + (process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "?cluster=devnet" : "") }>
+                                    <Button style="filled">
+                                        View on Solscan
+                                    </Button>
+                                </a>
+                            </div>
+                            <div className="w-full md:w-1/4">
+                                <a href={ `https://t.me/+58fH0cwGotc0MjFh` }>
+                                    <Button style="discord">
+                                        Join our Telegram
+                                    </Button>
+                                </a>
+                            </div>
+                            <div className="w-full md:w-1/4">
+                                <a href={ `https://twitter.com/tipsea01` }>
+                                    <Button style="twitter">
+                                        Follow our Twitter
+                                    </Button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
 
     useEffect( () =>
     {
@@ -84,18 +106,20 @@ const Redeem: NextPage = () =>
                 if ( nft )
                 {
                     const nftJson = nft.json;
+                    const attributes = nftJson?.attributes?.find((obj) => { return obj.trait_type === "Sender"})
+                    console.log(attributes)
                     const nftObj: Nft = {
                         mint: nft.address,
                         title: nft.name,
-                        description: nft.json?.description ?? "",
+                        description: nftJson?.description ?? "",
                         imageUrl: nftJson?.image ?? "",
                         creator: nft.creators[ 0 ].address.toBase58() ?? "",
+                        from: attributes ? attributes.value : "",
                         redeemed: nft.uses ? nft.uses.remaining.isZero() ? true : false : false
                     };
                     nftObj.creator === process.env.NEXT_PUBLIC_TIPSEA && myMetaplexNfts.push( nftObj );
                 }
             }
-            // console.log(myMetaplexNfts);
             setMyNfts( myMetaplexNfts );
             setLoading( false );
         }
@@ -126,9 +150,14 @@ const Redeem: NextPage = () =>
         if ( program )
         {
             setLoading( true );
-            const redeem_tx = await redeem( program, wallet.signTransaction, toRedeem );
-            setSignature( redeem_tx );
-            // refresh
+            try {
+                const redeem_tx = await redeem( program, wallet.signTransaction, toRedeem );
+                setLoading( false );
+                setSignature( redeem_tx );
+            } catch (e) {
+                toast.error("Error: Redemption Error")
+                setLoading( false );
+            }
         }
 
     }
@@ -136,13 +165,15 @@ const Redeem: NextPage = () =>
     return (
         <Layout>
             <div className=''>
-                <div className="text-xl font-semibold text-left">
-                    Redeem your Tipsea
+                <div className={`${ toRedeem.length < 1 || loading || signature ? "hidden" : "inline-block" }`}>
+                    <div className="text-xl font-semibold text-left">
+                        Redeem your Tipsea
+                    </div>
+                    <div className="mt-2 mb-4">
+                        (Select up to 10)
+                    </div>
                 </div>
-                <div className="mt-2 mb-4">
-                    (Select up to 10)
-                </div>
-                <div className={ `mb-4 w-full md:w-fit ${ toRedeem.length < 1 || loading ? "invisible" : "inline-block" }` }>
+                <div className={ `mb-4 w-full md:w-fit ${ signature ? "hidden" : toRedeem.length < 1 || loading ? "invisible" : "inline-block" }` }>
                     <Button style="filled" onClick={ handleRedeem }>
                         Redeem for { toRedeem.length * 8 } USDC
                     </Button>

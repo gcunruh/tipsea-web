@@ -2,6 +2,7 @@ import React, { FC, useMemo } from "react";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import { ConnectionProvider } from "@solana/wallet-adapter-react";
+import { Toaster } from 'react-hot-toast';
 
 import '../styles/globals.css'
 require('@solana/wallet-adapter-react-ui/styles.css')
@@ -18,11 +19,14 @@ const WalletProvider = dynamic(
 function MyApp({ Component, pageProps }: AppProps) {
 
   return (
+    <>
+    <Toaster />
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider>
           <Component {...pageProps} />
       </WalletProvider>
     </ConnectionProvider>
+    </>
   )
 }
 

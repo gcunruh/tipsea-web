@@ -61,13 +61,13 @@ export default function Mint({ fields, orderOptions, selectedOrder, loading, wal
                                 <div className="text-right text-gray-400 mr-4 md:mr-2 my-2 md:my-0">
                                     I&apos;m a future NFT!
                                 </div>
-                                <div className="flex flex-col md:flex-row">
-                                    <img className="w-full md:w-1/2 px-4 md:px-6" src={orderOptions.find(element => element.id === selectedOrder)?.imageSrc} />
-                                    <div className="w-full md:w-1/2 px-4 md:px-0 my-4 md:my-0">
+                                <div className="grid grid-cols-1 md:grid-cols-2">
+                                    <img alt="drink" className="w-full px-4 md:px-6" src={orderOptions.find(element => element.id === selectedOrder)?.imageSrc} />
+                                    <div className="flex flex-col w-full px-4 md:px-0 my-4 md:my-0">
                                         <label className="mt-1 block text-sm font-bold text-cyan-900">
                                             To
                                         </label>
-                                        <div className="text-base mt-1 mb-4 font-medium">
+                                        <div className="text-base mt-1 mb-4 font-medium break-words">
                                             {fields.to}
                                         </div>
                                         <label className="mt-1 block text-sm font-bold text-cyan-900">

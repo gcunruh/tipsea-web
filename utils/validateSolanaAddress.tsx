@@ -6,6 +6,6 @@ export const validateSolanaAddress = (address: string) => {
         let isSolana = PublicKey.isOnCurve(pubkey.toBuffer())
         return isSolana
     } catch (error) {
-        return Error("Eh not this time buddy.")
+        throw Error("Eh not this time buddy.")
     }
 }
