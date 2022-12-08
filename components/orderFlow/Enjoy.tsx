@@ -186,7 +186,7 @@ export default function Enjoy ( { fields, orderOptions, selectedOrder, nextStep,
                     <div>
                         <div className="w-full flex flex-col md:flex-row items-center gap-1 md:gap-4 my-2">
                             <div className="w-full md:w-1/4">
-                                <a href={ `https://solscan.io/tx/${ signature }` + (process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "?cluster=devnet" : "") }>
+                                <a href={ `https://solscan.io/tx/${ signature }` + (process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "?cluster=devnet" : "") } target="_blank" rel="noreferrer">
                                     <Button style="filled">
                                         View on Solscan
                                     </Button>
