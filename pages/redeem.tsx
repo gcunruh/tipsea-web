@@ -14,6 +14,7 @@ import Button from '../components/Button';
 import { useRouter } from 'next/router';
 import { toast } from 'react-hot-toast';
 import { sign } from 'crypto';
+import Box from '../components/Box';
 
 export type Nft = {
     mint: PublicKey;
@@ -44,12 +45,70 @@ const Redeem: NextPage = () =>
         <Loading />
     </div>
 
-    const RedeemView = <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4 md:gap-8">
-        { myNfts?.map( function ( item, i )
-        {
-            return <RedeemTile key={ item.mint.toBase58() } id={ i } name={ item.title } imageSrc={ item.imageUrl } message={item.description} from={item.from} onClick={ () => { item.redeemed ? null : toRedeem.includes( item ) ? handleRemoveRedeem( item ) : handleAddRedeem( item ); } } selected={ toRedeem.includes( item ) } redeemed={ item.redeemed } />;
-        } ) }
+    const RedeemView = <div className="flex flex-col md:flex-row-reverse gap-4">
+        <div className='w-full md:w-1/2'>
+            <Box>
+                <div className='p-2'>
+                <div className="flex flex-row justify-between">
+                <div className="font-medium">Receipt</div>
+                <div className={ `mb-4 w-1/2 md:w-fit ${ signature ? "invisble" : toRedeem.length < 1 || loading ? "invisible" : "" }` }>
+                    <Button style="filled" onClick={ handleRedeem }>
+                        Redeem
+                    </Button>
+                </div>
+
+                </div>
+                <div className={`${ toRedeem.length > 0 ? "md:hidden flex" : "md:hidden hidden"} flex-row justify-between my-2`}>
+                    <div className="text-semibold">
+                        Drink(s)
+                    </div>
+                    <div>
+                        + 8 USDC
+                    </div>
+                </div>
+                { toRedeem?.map( function ( item, i )
+            {
+                return <div key={item.mint.toBase58()} className="hidden md:flex flex-row justify-between my-2">
+                    <div className="text-semibold">
+                        {item.title}
+                    </div>
+                    <div>
+                        + 8 USDC
+                    </div>
+                </div>
+            } ) }
+            <div className="relative flex py-2 items-center">
+                <div className="flex-grow border-t border-cyan-900"></div>
+            </div>
+            <div className="flex flex-row justify-between">
+                <div>
+                    Bartender&apos;s Tip
+                </div>
+                <div>
+                    - {1 * toRedeem.length} USDC
+                </div>
+            </div>
+            <div className="flex flex-row justify-between text-semibold">
+                <div>
+                    Total
+                </div>
+                <div>
+                    {7 * toRedeem.length} USDC
+                </div>
+            </div>
+            </div>
+            </Box>
+        </div>
+        <div className="w-full grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-4 md:gap-8">
+            { myNfts?.map( function ( item, i )
+            {
+                return <RedeemTile key={ item.mint.toBase58() } id={ i } name={ item.title } imageSrc={ item.imageUrl } message={item.description} from={item.from} onClick={ () => { item.redeemed ? null : toRedeem.includes( item ) ? handleRemoveRedeem( item ) : handleAddRedeem( item ); } } selected={ toRedeem.includes( item ) } redeemed={ item.redeemed } />;
+            } ) }
+        </div>
     </div>
+    
+    
+
 
     const NoTipseaView = <div className=" my-10 font-semibold text-center">
         No Tipseas found!
@@ -165,18 +224,13 @@ const Redeem: NextPage = () =>
     return (
         <Layout>
             <div className=''>
-                <div className={`${ toRedeem.length < 1 || loading || signature ? "hidden" : "inline-block" }`}>
+                <div className={`${ loading || signature ? "hidden" : "inline-block" }`}>
                     <div className="text-xl font-semibold text-left">
                         Redeem your Tipsea
                     </div>
                     <div className="mt-2 mb-4">
                         (Select up to 10)
                     </div>
-                </div>
-                <div className={ `mb-4 w-full md:w-fit ${ signature ? "hidden" : toRedeem.length < 1 || loading ? "invisible" : "inline-block" }` }>
-                    <Button style="filled" onClick={ handleRedeem }>
-                        Redeem for { toRedeem.length * 8 } USDC
-                    </Button>
                 </div>
                 <div>
 
