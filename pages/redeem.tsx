@@ -251,7 +251,6 @@ const Redeem: NextPage = () => {
           };
           nftObj.creator === process.env.NEXT_PUBLIC_TIPSEA &&
             myMetaplexNfts.push(nftObj);
-          console.log(nftObj.uuid);
         }
       }
       setMyNfts(myMetaplexNfts);
@@ -286,7 +285,6 @@ const Redeem: NextPage = () => {
       } else {
         const offChainMetadata = JSON.parse(data.Body.toString("utf-8"));
         offChainMetadata.attributes[2].value = "Yes";
-        console.log(`hitting and also ${offChainMetadata}`)
   
         var buf = Buffer.from(JSON.stringify(offChainMetadata));
   
