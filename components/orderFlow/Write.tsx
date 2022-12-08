@@ -1,8 +1,6 @@
 import InputLg from "../InputLg";
 import InputSm from "../InputSm";
 import Button from "../Button";
-import { resolveSOLDomain } from "../../utils/resolveSOLDomain";
-import { validateSolanaAddress } from "../../utils/validateSolanaAddress";
 
 type Fields = {
     to: string;

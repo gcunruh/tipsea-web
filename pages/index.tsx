@@ -22,6 +22,7 @@ import { PROGRAM_ADDRESS } from '@metaplex-foundation/mpl-token-metadata';
 import useProgram from "../hooks/useProgram";
 import { Connection, PublicKey } from '@solana/web3.js';
 import { resolveSOLDomain } from '../utils/resolveSOLDomain';
+import { resolveGlowDomain } from "../utils/resolveGlowDomain";
 import { validateSolanaAddress } from '../utils/validateSolanaAddress';
 import { toast } from 'react-hot-toast';
 
@@ -103,6 +104,13 @@ const Home: NextPage = () =>
         setProperAddress(resolvedAddress);
       } catch (error) {
         throw Error("Invalid .sol Domain")
+      }
+    } else if (fields.to.includes(".glow")) {
+      try {
+        const resolvedAddress = await resolveGlowDomain(fields.to);
+        setProperAddress(resolvedAddress)
+      } catch (error) {
+        throw Error("Invalid .glow Domain")
       }
     } else {
         try {
