@@ -261,7 +261,11 @@ const Home: NextPage = () =>
 
   return (
     <Layout>
-      <div className="flex flex-col md:flex-row justify-start md:justify-around mx-5 md:mx-12 mt-5">
+          <div className="text-xl md:text-3xl font-bold text-left">
+            It&apos;s Five O&apos;clock Somewhere
+          </div>
+          <div className="mt-2 mb-4">Order a Tipsea</div>
+      <div className="flex flex-col md:flex-row justify-start md:justify-around mx-5 md:mx-4 mt-5">
         <div className="w-full md:w-1/4">
           <Menu steps={ steps } currentStep={ step } />
           { ( () =>

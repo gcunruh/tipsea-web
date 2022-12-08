@@ -8,7 +8,7 @@ import {
 export default function Header() {
 
     return (
-        <header className="flex flex-row justify-between items-center py-2">
+        <header className="flex flex-row justify-between items-center pt-2 pb-4">
             <Link href="/">
                 <div className="flex flex-row items-center cursor-pointer">
                     <img className="h-14 w-14" src="./tipsea_logo.svg" />
@@ -26,6 +26,11 @@ export default function Header() {
                 <div className="hidden md:inline-block">
                 <Link  href="/redeem">
                     Redeem
+                </Link>
+                </div>
+                <div className="hidden md:inline-block">
+                <Link  href="/faq">
+                    FAQ
                 </Link>
                 </div>
                 <div>

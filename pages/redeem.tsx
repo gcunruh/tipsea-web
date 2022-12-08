@@ -360,7 +360,7 @@ const Redeem: NextPage = () => {
     <Layout>
       <div className="">
         <div className={`${loading || signature ? "hidden" : "inline-block"}`}>
-          <div className="text-xl font-semibold text-left">
+          <div className="text-xl md:text-3xl font-bold text-left">
             Redeem your Tipsea
           </div>
           <div className="mt-2 mb-4">(Select up to 10)</div>
