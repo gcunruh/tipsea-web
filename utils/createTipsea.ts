@@ -52,7 +52,7 @@ export async function createTipsea(
   uri: string,
   name: string | undefined,
   symbol: string | undefined,
-  to: PublicKey
+  to: string
 ) {
   const programId = program.programId;
   const provider = program?.provider as AnchorProvider;
@@ -76,7 +76,7 @@ export async function createTipsea(
 
   const NftTokenAccount = await getAssociatedTokenAddress(
     mintKey.publicKey,
-    to
+    new PublicKey(to)
   );
 
   const metadataAddress = await getMetadata(mintKey.publicKey);
@@ -106,7 +106,7 @@ export async function createTipsea(
     createAssociatedTokenAccountInstruction(
       provider.wallet.publicKey,
       NftTokenAccount,
-      to,
+      new PublicKey(to),
       mintKey.publicKey
     )
   );

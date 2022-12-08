@@ -8,6 +8,7 @@ type OrderTileProps = {
     from: string;
     onClick: () => any;
     imageSrc: string;
+    message: string;
     selected?: boolean;
     redeemed?: boolean;
 }
@@ -16,7 +17,7 @@ const unSelectedStyles = "group-hover:bg-cyan-900 group-hover:bg-opacity-50"
 const selectedStyles = "bg-cyan-800"
 
 
-export default function RedeemTile({ id, name, from, onClick, imageSrc, selected, redeemed }: OrderTileProps) {
+export default function RedeemTile({ id, name, from, onClick, imageSrc, message, selected, redeemed }: OrderTileProps) {
 
     return (
         <Box>
@@ -34,14 +35,14 @@ export default function RedeemTile({ id, name, from, onClick, imageSrc, selected
                 </div>
             }
             </div>
-            <div className="my-1 font-medium">
+            <div className="my-2 font-medium">
                 {name}
             </div>
-            <div>
-                From: <span className="font-medium">{from}</span>
+            <div className="my-2">
+                From: <span className="font-medium break-words">{from.includes(".sol") ? from : (from.substring(0, 4) + "..") + from.slice(-4)}</span>
             </div>
-            <div>
-                Message: <span className="font-medium">This is a nice message from a friend</span>
+            <div className="my-2">
+                Message: <span className="font-medium">{message}</span>
             </div>
         </div>
         </Box>
