@@ -19,7 +19,7 @@ export default function Write({ fields, handleChange, nextStep, prevStep }:Write
     return (
         <>
             <div className="flex flex-col justify-end">
-                <InputSm label="Who is it going to?" placeholder="SOL address or .sol name" name="to" value={fields.to} handleChange={handleChange} />
+                <InputSm label="Who is it going to?" placeholder="SOL address / .sol name / .glow name" name="to" value={fields.to} handleChange={handleChange} />
                 <InputLg label="What do you want to say?" placeholder="Have a drink on me :-)" name="message" value={fields.message} handleChange={handleChange} />
             </div>
             {/* <div className="flex flex-row justify-end mt-2">
