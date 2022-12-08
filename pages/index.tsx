@@ -120,7 +120,7 @@ const Home: NextPage = () =>
           throw Error("Invalid Solana Address")
         }
     }
-    console.log(properAddress);
+    // console.log(properAddress);
   }
 
   async function uploadMetadata ()

@@ -119,9 +119,9 @@ export default function Enjoy ( { fields, orderOptions, selectedOrder, nextStep,
             new PublicKey( toPubkey ) // owner
         );
 
-        console.log( `Mint Key: ${ mintAddress }` );
-        console.log( `fromAta: ${ fromAta }` );
-        console.log( `toAta: ${ toAta }` );
+        // console.log( `Mint Key: ${ mintAddress }` );
+        // console.log( `fromAta: ${ fromAta }` );
+        // console.log( `toAta: ${ toAta }` );
 
         const mint_tx = new web3.Transaction().add(
             createAssociatedTokenAccountInstruction(
