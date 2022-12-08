@@ -138,7 +138,7 @@ const Home: NextPage = () =>
       name: orderOptions.find( element => element.id === selectedOrder )?.name,
       symbol: orderOptions.find( element => element.id === selectedOrder )?.name.replace(/\s+/g, '').toUpperCase().substring(0, 5),
       description: fields.message,
-      seller_fee_basis: 0,
+      seller_fee_basis_points: 0,
       external_url: "https://tipsea.xyz/",
       edition: "1",
       background_color: "000000",
