@@ -27,6 +27,7 @@ export type Nft = {
   from: string;
   redeemed: boolean;
   uuid: string;
+  verified: boolean;
 };
 
 interface Trait {
@@ -111,7 +112,7 @@ const Redeem: NextPage = () => {
       </div>
       <div className="w-full grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-4 md:gap-8">
         {myNfts?.map(function (item, i) {
-          return (
+          return item.verified ? 
             <RedeemTile
               key={item.mint.toBase58()}
               id={i}
@@ -129,7 +130,8 @@ const Redeem: NextPage = () => {
               selected={toRedeem.includes(item)}
               redeemed={item.redeemed}
             />
-          );
+          :
+          null
         })}
       </div>
     </div>
@@ -248,6 +250,7 @@ const Redeem: NextPage = () => {
                 : false
               : false,
             uuid: nft.uri.split("/").slice(-1)[0].replace(".json", ""),
+            verified: nft.collection ? nft.collection.address.toBase58() === process.env.NEXT_PUBLIC_TIPSEA_COLLECTION && nft.collection.verified ? true : false : false
           };
           nftObj.creator === process.env.NEXT_PUBLIC_TIPSEA &&
             myMetaplexNfts.push(nftObj);
@@ -357,7 +360,7 @@ const Redeem: NextPage = () => {
     <Layout>
       <div className="">
         <div className={`${loading || signature ? "hidden" : "inline-block"}`}>
-          <div className="text-xl font-semibold text-left">
+          <div className="text-xl md:text-3xl font-bold text-left">
             Redeem your Tipsea
           </div>
           <div className="mt-2 mb-4">(Select up to 10)</div>

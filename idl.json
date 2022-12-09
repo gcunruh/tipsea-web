@@ -100,6 +100,26 @@
           "name": "masterEdition",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "collectionMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "collectionMetadata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "collectionMasterEdition",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tipseaAdmin",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [

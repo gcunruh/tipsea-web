@@ -17,7 +17,7 @@ export const resolveSOLDomain = async (domain: string) => {
             SOL_TLD_AUTHORITY
         );
         const owner = await NameRegistryState.retrieve(
-            new Connection("https://wandering-holy-cherry.solana-mainnet.quiknode.pro/5f2ada1c7661ca37f78b510bc30ab4bf7b220615/"),
+            new Connection(process.env.NEXT_PUBLIC_CLUSTER === "devnet" ? "https://wandering-holy-cherry.solana-mainnet.quiknode.pro/5f2ada1c7661ca37f78b510bc30ab4bf7b220615/" : process.env.NEXT_PUBLIC_RPC_ENDPOINT),
             nameAccountKey
         );
         return owner.registry.owner.toBase58();

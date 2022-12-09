@@ -138,7 +138,7 @@ const Home: NextPage = () =>
       name: orderOptions.find( element => element.id === selectedOrder )?.name,
       symbol: orderOptions.find( element => element.id === selectedOrder )?.name.replace(/\s+/g, '').toUpperCase().substring(0, 5),
       description: fields.message,
-      seller_fee_basis: 0,
+      seller_fee_basis_points: 0,
       external_url: "https://tipsea.xyz/",
       edition: "1",
       background_color: "000000",
@@ -261,7 +261,11 @@ const Home: NextPage = () =>
 
   return (
     <Layout>
-      <div className="flex flex-col md:flex-row justify-start md:justify-around mx-5 md:mx-12 mt-5">
+          <div className="text-xl md:text-3xl font-bold text-left">
+            It&apos;s Five O&apos;clock Somewhere
+          </div>
+          <div className="mt-2 mb-4">Order a Tipsea</div>
+      <div className="flex flex-col md:flex-row justify-start md:justify-around mx-5 md:mx-4 mt-5">
         <div className="w-full md:w-1/4">
           <Menu steps={ steps } currentStep={ step } />
           { ( () =>

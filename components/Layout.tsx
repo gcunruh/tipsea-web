@@ -7,7 +7,7 @@ type LayoutProps = {
 
 export default function Layout({ children}: LayoutProps) {
     return (
-        <div className="h-screen bg-neutral-200 font-ibm-plex-mono text-cyan-900 px-2 md:px-6 pb-44">
+        <div className="h-screen bg-neutral-200 font-ibm-plex-mono text-cyan-900 px-3 md:px-6 pb-44">
             <Header />
                 {children}
             <Footer />
